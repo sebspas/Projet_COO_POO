@@ -27,14 +27,17 @@ public class GUIFactory {
 
     public GuiElement createGui(String gui) {
 
+            switch(gui) {
+                case "Login" :  return new Login();
 
-        if (gui.equals("login")) {
-            return new Login();
-        } else if (gui.equals("Message")){
-            return new Message();
-        } else {
-            System.out.println("Element de GUI inexistant !");
-            return null;
-        }
+                case "Contacts" : return new Contacts();
+
+                case "Message" : return new Message();
+
+                default :
+                    System.out.println("Element de GUI inexistant !");
+                    return null;
+            }
     }
+
 }

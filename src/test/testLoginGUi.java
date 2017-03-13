@@ -12,7 +12,8 @@ public class testLoginGUi {
 
         GUIFactory factory = new GUIFactory();
 
-        GuiElement login = factory.createGui("login");
+        GuiElement login = factory.createGui("Login");
         GuiElement message = factory.createGui("Message");
+        GuiElement contacts = factory.createGui("Contacts");
     }
 }
