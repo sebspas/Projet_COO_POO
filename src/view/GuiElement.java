@@ -6,4 +6,6 @@ package view;
 public interface GuiElement {
 
     void initComponents();
+
+    void notif(String msg);
 }

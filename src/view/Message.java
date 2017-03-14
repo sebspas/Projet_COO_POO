@@ -1,5 +1,7 @@
 package view;
 
+import controller.Controller;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -9,8 +11,10 @@ import java.awt.*;
  */
 public class Message extends JFrame implements GuiElement {
 
-    public Message() {
+    private Controller controller;
 
+    public Message(Controller controller) {
+        this.controller = controller;
         initComponents();
     }
 
@@ -72,5 +76,10 @@ public class Message extends JFrame implements GuiElement {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
         this.setVisible(true);
+    }
+
+    @Override
+    public void notif(String msg) {
+
     }
 }

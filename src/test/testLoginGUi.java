@@ -10,10 +10,10 @@ public class testLoginGUi {
 
     public static void main(String[] args) {
 
-        GUIFactory factory = new GUIFactory();
+        //GUIFactory factory = new GUIFactory();
 
-        GuiElement login = factory.createGui("Login");
-        GuiElement message = factory.createGui("Message");
-        GuiElement contacts = factory.createGui("Contacts");
+        //GuiElement login = factory.createGui("Login");
+        //GuiElement message = factory.createGui("Message");
+        //GuiElement contacts = factory.createGui("Contacts");
     }
 }

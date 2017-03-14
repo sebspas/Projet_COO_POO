@@ -1,5 +1,7 @@
 package view;
 
+import controller.Controller;
+
 import javax.swing.*;
 
 /**
@@ -7,7 +9,11 @@ import javax.swing.*;
  */
 public class GUIFactory {
 
-    public GUIFactory() {
+    private Controller controller;
+
+    public GUIFactory(Controller controller) {
+        this.controller = controller;
+
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -28,11 +34,11 @@ public class GUIFactory {
     public GuiElement createGui(String gui) {
 
             switch(gui) {
-                case "Login" :  return new Login();
+                case "Login" :  return new Login(controller);
 
-                case "Contacts" : return new Contacts();
+                case "Contacts" : return new Contacts(controller);
 
-                case "Message" : return new Message();
+                case "Message" : return new Message(controller);
 
                 default :
                     System.out.println("Element de GUI inexistant !");

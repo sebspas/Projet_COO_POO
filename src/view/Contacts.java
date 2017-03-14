@@ -1,14 +1,16 @@
 package view;
 
+import controller.Controller;
+
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class Contacts extends JFrame implements GuiElement {
 
-    public Contacts(){
+    public Controller controller;
+
+    public Contacts(Controller controller){
+        this.controller = controller;
 
         this.initComponents();
     }
@@ -48,6 +50,11 @@ public class Contacts extends JFrame implements GuiElement {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
         this.setVisible(true);
+    }
+
+    @Override
+    public void notif(String msg) {
+
     }
 
 }

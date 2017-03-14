@@ -1,18 +1,23 @@
 package view;
 
+import controller.Controller;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-/**
- * Created by tahel on 08/03/17.
- */
 public class Login extends JFrame implements GuiElement {
 
-    public Login() {
+    private Controller controller;
 
+    private JLabel labelError;
+
+    public Login(Controller controller) {
+        this.controller = controller;
         initComponents();
     }
 
@@ -25,13 +30,17 @@ public class Login extends JFrame implements GuiElement {
         panel.setLayout(new BorderLayout());
 
 
-        JButton login = new JButton("Login");
-        login.setMargin(new Insets(20,20,20,20));
-
-
-
 
         JTextField username = new JTextField();
+
+        JButton login = new JButton("Login");
+        login.setMargin(new Insets(20,20,20,20));
+        login.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.buttonLoginClicked(username.getText());
+            }
+        });
 
         Border line = BorderFactory.createLineBorder(Color.DARK_GRAY);
         Border empty = new EmptyBorder(0, 20, 0, 0);
@@ -41,7 +50,7 @@ public class Login extends JFrame implements GuiElement {
 
 
         JLabel labelInfo = new JLabel("Entrer un pseudo :");
-        JLabel labelError = new JLabel(" ");
+        labelError = new JLabel(" ");
 
         JPanel panel_input = new JPanel();
         panel_input.setLayout(new BorderLayout());
@@ -59,5 +68,10 @@ public class Login extends JFrame implements GuiElement {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
         this.setVisible(true);
+    }
+
+    @Override
+    public void notif(String msg) {
+        labelError.setText(msg);
     }
 }
