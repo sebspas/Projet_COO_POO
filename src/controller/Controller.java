@@ -15,10 +15,13 @@ public class Controller {
     private Model model;
 
     private GuiElement login;
+    private GuiElement mainWindows;
+
+    private GUIFactory guiFactory;
 
     public Controller() {
         model = new Model();
-        GUIFactory guiFactory = new GUIFactory(this);
+        guiFactory = new GUIFactory(this);
 
         login = guiFactory.createGui("Login");
     }
@@ -26,7 +29,8 @@ public class Controller {
     public void buttonLoginClicked(String pseudo) {
         try {
             if (model.connectChat(pseudo, Inet4Address.getLocalHost())) {
-                login.notif("Vous êtes connecté");
+                mainWindows = guiFactory.createGui("Contacts");
+                login.close();
             } else {
                 login.notif("Connection impossible");
             }
@@ -37,5 +41,9 @@ public class Controller {
 
     public static void main(String[] args) {
         Controller controller = new Controller();
+    }
+
+    public Model getModel() {
+        return model;
     }
 }

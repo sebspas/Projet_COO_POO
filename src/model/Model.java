@@ -30,11 +30,15 @@ public class Model {
             // si pseudo est libre
             // on crée l'user courant et on le passe dans la table
             currentUser = new User(pseudo, inet4Address);
-
+            System.out.println("Utilisateur crée !");
             return true;
         } else {
             // si le pseudo n'est pas libre
             return false;
         }
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
     }
 }

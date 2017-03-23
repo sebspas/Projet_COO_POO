@@ -38,7 +38,7 @@ public class GUIFactory {
 
                 case "Contacts" : return new Contacts(controller);
 
-                case "Message" : return new Message(controller);
+                case "Message" : return new Message(controller, null);
 
                 default :
                     System.out.println("Element de GUI inexistant !");

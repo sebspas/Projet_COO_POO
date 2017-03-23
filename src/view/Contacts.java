@@ -1,39 +1,26 @@
 package view;
 
 import controller.Controller;
+import model.User;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.HashMap;
 
-public class Contacts extends JFrame implements GuiElement {
+public class Contacts extends GuiElement {
 
-    public Controller controller;
+    private Controller controller;
+
+    private HashMap<String, PanelUserContact> userToPanel;
+
+    private HashMap<String, Message> usertToChat;
 
     public Contacts(Controller controller){
         this.controller = controller;
+        this.userToPanel = new HashMap<>();
 
         this.initComponents();
-    }
-
-    public JPanel createPanel(String nom, String stat, Icon icon){
-
-        //JPanel panelContact = new JPanel(new BorderLayout());
-        JPanel panelContact = new JPanel(new GridLayout(1,4));
-        JLabel photo = new JLabel(icon);
-
-        JLabel name = new JLabel(nom);
-        JLabel status = new JLabel(stat);
-
-				/*
-				panelContact.add(photo, BorderLayout.WEST);
-				panelContact.add(name, BorderLayout.CENTER);
-				panelContact.add(status, BorderLayout.EAST);
-				*/
-        panelContact.add(photo);
-        panelContact.add(name);
-        panelContact.add(status);
-
-        return panelContact;
     }
 
     public void initComponents(){
@@ -41,11 +28,22 @@ public class Contacts extends JFrame implements GuiElement {
         this.setTitle("Contacts - ChatWithBoo");
         this.setPreferredSize(new Dimension(400,800));
 
-        this.setLayout(new GridLayout(8, 1));
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(20, 1));
+        panel.setBorder(new EmptyBorder(20,20,20,20));
 
-        Icon iconContacts = new ImageIcon("images/contact.png");
-        this.add(createPanel("username", "online", iconContacts));
+        // USER LOCAL
+        User user = controller.getModel().getCurrentUser();
+        GUIFactory guiFactory = new GUIFactory(controller);
+        Message msg = (Message) guiFactory.createGui("Message");
+        msg.setDest(user);
 
+        this.userToPanel.put(user.getPseudo(), new PanelUserContact(user, msg));
+        panel.add(userToPanel.get(user.getPseudo()));
+
+
+
+        this.add(panel);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
