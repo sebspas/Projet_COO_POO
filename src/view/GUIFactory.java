@@ -1,6 +1,7 @@
 package view;
 
 import controller.Controller;
+import model.User;
 
 import javax.swing.*;
 
@@ -31,14 +32,14 @@ public class GUIFactory {
         }
     }
 
-    public GuiElement createGui(String gui) {
+    public GuiElement createGui(String gui, User user) {
 
             switch(gui) {
                 case "Login" :  return new Login(controller);
 
                 case "Contacts" : return new Contacts(controller);
 
-                case "Message" : return new Message(controller, null);
+                case "Message" : return new Message(controller, user);
 
                 default :
                     System.out.println("Element de GUI inexistant !");

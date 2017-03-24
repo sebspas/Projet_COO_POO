@@ -12,13 +12,8 @@ public class Contacts extends GuiElement {
 
     private Controller controller;
 
-    private HashMap<String, PanelUserContact> userToPanel;
-
-    private HashMap<String, Message> usertToChat;
-
     public Contacts(Controller controller){
         this.controller = controller;
-        this.userToPanel = new HashMap<>();
 
         this.initComponents();
     }
@@ -35,13 +30,14 @@ public class Contacts extends GuiElement {
         // USER LOCAL
         User user = controller.getModel().getCurrentUser();
         GUIFactory guiFactory = new GUIFactory(controller);
-        Message msg = (Message) guiFactory.createGui("Message");
+        Message msg = (Message) guiFactory.createGui("Message", user);
         msg.setDest(user);
 
-        this.userToPanel.put(user.getPseudo(), new PanelUserContact(user, msg));
-        panel.add(userToPanel.get(user.getPseudo()));
+        controller.addUserToChat(user.getPseudo(), msg);
 
-
+        PanelUserContact panelUser = new PanelUserContact(user, msg);
+        controller.addUserToPanel(user.getPseudo(), panelUser);
+        panel.add(panelUser);
 
         this.add(panel);
         this.setResizable(false);
