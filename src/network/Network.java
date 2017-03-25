@@ -6,7 +6,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.HashMap;
 
-public class Network {
+public class Network extends Thread {
 
     private DatagramSocket socketSender;
     private DatagramSocket socketReceiver;
@@ -56,8 +56,8 @@ public class Network {
         try {
             socketSender = new DatagramSocket();
             /*****************************************
-            /* Broadcast à l'arrivé sur le reseaux
-            ******************************************/
+             /* Broadcast à l'arrivé sur le reseaux
+             ******************************************/
             // broadcast a vrai
             socketSender.setBroadcast(true);
             // message à envoyer
@@ -69,6 +69,15 @@ public class Network {
             socketSender.send(packet);
             System.out.println("Packet Hello envoyé");
             socketSender.setBroadcast(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        this.start();
+    }
+
+    public void run() {
+        try {
 
             /******************************************
              * Reception de la réponse
@@ -97,8 +106,8 @@ public class Network {
                             newPortForReceive,
                             "socket_created");
 
-                    data = convertObjToData(controlMessageSocket);
-                    packet = new DatagramPacket(data, data.length, controlMessage1.getUserAdresse(), 15530);
+                    byte[] data = convertObjToData(controlMessageSocket);
+                    DatagramPacket packet = new DatagramPacket(data, data.length, controlMessage1.getUserAdresse(), 15530);
                     socketSender.send(packet);
 
                     // on crée une Communication socket pour cette user
@@ -134,8 +143,8 @@ public class Network {
                                 newPortForReceive,
                                 "socket_created");
 
-                        data = convertObjToData(controlMessageSocket);
-                        packet = new DatagramPacket(data, data.length, controlMessage1.getUserAdresse(), 15530);
+                        byte[] data = convertObjToData(controlMessageSocket);
+                        DatagramPacket packet = new DatagramPacket(data, data.length, controlMessage1.getUserAdresse(), 15530);
                         socketSender.send(packet);
                     }
                 }
