@@ -1,17 +1,12 @@
 package network;
 
-import javax.jws.soap.SOAPBinding;
 import java.io.*;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
 import java.util.HashMap;
 
-/**
- * Created by tahel on 24/03/17.
- */
-public class Network {
+public class Network extends Thread {
 
     private DatagramSocket socketSender;
     private DatagramSocket socketReceiver;
@@ -52,13 +47,17 @@ public class Network {
         return null;
     }
 
+    public CommunicationSocket getSocket(String username) {
+        return UserToSocket.get(username);
+    }
+
     public Network() {
         UserToSocket = new HashMap<>();
         try {
             socketSender = new DatagramSocket();
             /*****************************************
-            /* Broadcast à l'arrivé sur le reseaux
-            ******************************************/
+             /* Broadcast à l'arrivé sur le reseaux
+             ******************************************/
             // broadcast a vrai
             socketSender.setBroadcast(true);
             // message à envoyer
@@ -66,16 +65,27 @@ public class Network {
             ControlMessage controlMessage = new ControlMessage("xkr0", InetAddress.getLocalHost(), -1, "hello");
             byte[] data = convertObjToData(controlMessage);
 
-            DatagramPacket packet = new DatagramPacket(data, data.length, InetAddress.getLocalHost(), listenNumber);
+            DatagramPacket packet = new DatagramPacket(data, data.length, InetAddress.getByName("255.255.255.255"), listenNumber);
+
             socketSender.send(packet);
             System.out.println("Packet Hello envoyé");
+            socketSender.setBroadcast(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        this.start();
+    }
+
+    public void run() {
+        try {
 
             /******************************************
              * Reception de la réponse
              ******************************************/
             socketReceiver = new DatagramSocket(listenNumber);
             byte[] incomingData = new byte[1024];
-            socketSender.setBroadcast(false);
+
 
             while (true) {
                 DatagramPacket incomingPacket = new DatagramPacket(incomingData, incomingData.length);
@@ -97,8 +107,10 @@ public class Network {
                             newPortForReceive,
                             "socket_created");
 
-                    data = convertObjToData(controlMessageSocket);
-                    packet = new DatagramPacket(data, data.length, controlMessage1.getUserAdresse(), listenNumber);
+
+                    byte[] data = convertObjToData(controlMessageSocket);
+                    DatagramPacket packet = new DatagramPacket(data, data.length, controlMessage1.getUserAdresse(), listenNumber);
+
                     socketSender.send(packet);
 
                     // on crée une Communication socket pour cet user
@@ -134,11 +146,12 @@ public class Network {
                                 newPortForReceive,
                                 "socket_created");
 
-                        data = convertObjToData(controlMessageSocket);
-                        packet = new DatagramPacket(data, data.length, controlMessage1.getUserAdresse(), listenNumber);
+
+                        byte[] data = convertObjToData(controlMessageSocket);
+                        DatagramPacket packet = new DatagramPacket(data, data.length, controlMessage1.getUserAdresse(), listenNumber);
+
                         socketSender.send(packet);
                     }
-                    // on crée une socket aussi
                 }
             }
 

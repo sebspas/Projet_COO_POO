@@ -1,12 +1,11 @@
 package network;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ThreadFactory;
 
 /**
  * Created by tahel on 28/02/17.
@@ -44,22 +43,61 @@ public class CommunicationSocket extends Thread {
     public void run() {
         while (true) {
             try {
-                System.out.println("Socket Lancé ");
-                Thread.sleep(10000);
-                //lines.add(reader.readLine() + "\n");
+                byte[] incomingData = new byte[1024];
+
+                DatagramPacket incomingPacket = new DatagramPacket(incomingData, incomingData.length);
+                // on attend un message
+                socket.receive(incomingPacket);
+                byte[] dataReceive = incomingPacket.getData();
+
+                // on reconvertit en ControlMessage
+                Message message = convertDataToMessage(dataReceive);
+                System.out.println("message reçue :" + message);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public String getLastline() {
+    private Message convertDataToMessage(byte[] dataReceive) {
         try {
-            //return lines.take();
+            ByteArrayInputStream in = new ByteArrayInputStream(dataReceive);
+            ObjectInputStream is = null;
+            is = new ObjectInputStream(in);
+            Message msg = (Message) is.readObject();
+            return msg;
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public byte[] convertObjToData(Object obj) {
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            ObjectOutputStream os = null;
+            os = new ObjectOutputStream(outputStream);
+            os.writeObject(obj);
+            byte[] data = outputStream.toByteArray();
+            return data;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void sendMsg(Message msg) {
+        byte[] data = convertObjToData(msg);
+        DatagramPacket packet = new DatagramPacket(data, data.length, destip, 15530);
+        try {
+            socket.send(packet);
+            System.out.println("Message envoyé !");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
