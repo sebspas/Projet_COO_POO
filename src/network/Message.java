@@ -9,11 +9,6 @@ import java.net.InetAddress;
  */
 public class Message implements Serializable {
 
-    public enum DataType {
-        File,
-        Text
-    }
-
     private DataType type;
     private String data;
 
@@ -31,4 +26,35 @@ public class Message implements Serializable {
         this.destAdr = destAdr;
         this.srcAdr = srcAdr;
     }
+
+
+    public DataType getType() {
+        return type;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public String getDestPseudo() {
+        return destPseudo;
+    }
+
+    public String getSrcPseudo() {
+        return srcPseudo;
+    }
+
+    public InetAddress getDestAdr() {
+        return destAdr;
+    }
+
+    public InetAddress getSrcAdr() {
+        return srcAdr;
+    }
+
+    public enum DataType {
+        File,
+        Text
+    }
+
 }
