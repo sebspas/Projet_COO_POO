@@ -37,6 +37,7 @@ public class CommunicationSocket extends Thread {
         }
 
         messages = new ArrayList<>();
+        System.out.println("Socket crée sur le port : " + port);
         this.start();
     }
 
@@ -91,7 +92,7 @@ public class CommunicationSocket extends Thread {
 
     public void sendMsg(Message msg) {
         byte[] data = convertObjToData(msg);
-        DatagramPacket packet = new DatagramPacket(data, data.length, destip, 15530);
+        DatagramPacket packet = new DatagramPacket(data, data.length, destip, portSocketDest);
         try {
             socket.send(packet);
             System.out.println("Message envoyé !");
