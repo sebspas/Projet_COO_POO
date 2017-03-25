@@ -1,16 +1,11 @@
 package network;
 
-import javax.jws.soap.SOAPBinding;
 import java.io.*;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
 import java.util.HashMap;
 
-/**
- * Created by tahel on 24/03/17.
- */
 public class Network {
 
     private DatagramSocket socketSender;
@@ -52,6 +47,10 @@ public class Network {
         return null;
     }
 
+    public CommunicationSocket getSocket(String username) {
+        return UserToSocket.get(username);
+    }
+
     public Network() {
         UserToSocket = new HashMap<>();
         try {
@@ -66,16 +65,17 @@ public class Network {
             ControlMessage controlMessage = new ControlMessage("tahel", InetAddress.getLocalHost(), -1, "hello");
             byte[] data = convertObjToData(controlMessage);
 
-            DatagramPacket packet = new DatagramPacket(data, data.length, InetAddress.getLocalHost(), 15530);
+            DatagramPacket packet = new DatagramPacket(data, data.length, InetAddress.getByName("255.255.255.255"), 15530);
             socketSender.send(packet);
             System.out.println("Packet Hello envoyé");
+            socketSender.setBroadcast(false);
 
             /******************************************
              * Reception de la réponse
              ******************************************/
             socketReceiver = new DatagramSocket(15530);
             byte[] incomingData = new byte[1024];
-            socketSender.setBroadcast(false);
+
 
             while (true) {
                 DatagramPacket incomingPacket = new DatagramPacket(incomingData, incomingData.length);
@@ -138,7 +138,6 @@ public class Network {
                         packet = new DatagramPacket(data, data.length, controlMessage1.getUserAdresse(), 15530);
                         socketSender.send(packet);
                     }
-                    // on crée une socket aussi
                 }
             }
 

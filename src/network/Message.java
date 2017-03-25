@@ -15,16 +15,11 @@ public class Message implements Serializable {
     private String destPseudo;
     private String srcPseudo;
 
-    private InetAddress destAdr;
-    private InetAddress srcAdr;
-
-    public Message(DataType type, String data, String destPseudo, String srcPseudo, InetAddress destAdr, InetAddress srcAdr) {
+    public Message(DataType type, String data, String destPseudo, String srcPseudo) {
         this.type = type;
         this.data = data;
         this.destPseudo = destPseudo;
         this.srcPseudo = srcPseudo;
-        this.destAdr = destAdr;
-        this.srcAdr = srcAdr;
     }
 
 
@@ -42,14 +37,6 @@ public class Message implements Serializable {
 
     public String getSrcPseudo() {
         return srcPseudo;
-    }
-
-    public InetAddress getDestAdr() {
-        return destAdr;
-    }
-
-    public InetAddress getSrcAdr() {
-        return srcAdr;
     }
 
     public enum DataType {
