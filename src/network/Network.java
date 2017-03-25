@@ -63,17 +63,17 @@ public class Network {
             socketSender.setBroadcast(true);
             // message à envoyer
             // création du packet
-            ControlMessage controlMessage = new ControlMessage("tahel", InetAddress.getLocalHost(), -1, "hello");
+            ControlMessage controlMessage = new ControlMessage("xkr0", InetAddress.getLocalHost(), -1, "hello");
             byte[] data = convertObjToData(controlMessage);
 
-            DatagramPacket packet = new DatagramPacket(data, data.length, InetAddress.getLocalHost(), 15530);
+            DatagramPacket packet = new DatagramPacket(data, data.length, InetAddress.getLocalHost(), listenNumber);
             socketSender.send(packet);
             System.out.println("Packet Hello envoyé");
 
             /******************************************
              * Reception de la réponse
              ******************************************/
-            socketReceiver = new DatagramSocket(15530);
+            socketReceiver = new DatagramSocket(listenNumber);
             byte[] incomingData = new byte[1024];
             socketSender.setBroadcast(false);
 
@@ -92,16 +92,16 @@ public class Network {
                     int newPortForReceive = listenNumber + cptSockect;
                     cptSockect++;
                     ControlMessage controlMessageSocket = new ControlMessage(
-                            "tahel",
+                            "xkr0",
                             InetAddress.getLocalHost(),
                             newPortForReceive,
                             "socket_created");
 
                     data = convertObjToData(controlMessageSocket);
-                    packet = new DatagramPacket(data, data.length, controlMessage1.getUserAdresse(), 15530);
+                    packet = new DatagramPacket(data, data.length, controlMessage1.getUserAdresse(), listenNumber);
                     socketSender.send(packet);
 
-                    // on crée une Communication socket pour cette user
+                    // on crée une Communication socket pour cet user
                     CommunicationSocket newComSock = new CommunicationSocket(controlMessage1.getUserAdresse(), newPortForReceive);
                     UserToSocket.put(controlMessage1.getUserName(), newComSock);
 
@@ -129,13 +129,13 @@ public class Network {
 
                         // on envoie les informatiosn de la nouvelle socket
                         ControlMessage controlMessageSocket = new ControlMessage(
-                                "tahel",
+                                "xkr0",
                                 InetAddress.getLocalHost(),
                                 newPortForReceive,
                                 "socket_created");
 
                         data = convertObjToData(controlMessageSocket);
-                        packet = new DatagramPacket(data, data.length, controlMessage1.getUserAdresse(), 15530);
+                        packet = new DatagramPacket(data, data.length, controlMessage1.getUserAdresse(), listenNumber);
                         socketSender.send(packet);
                     }
                     // on crée une socket aussi
