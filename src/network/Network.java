@@ -164,6 +164,9 @@ public class Network extends Thread {
                         DatagramPacket packet = new DatagramPacket(data, data.length, controlMessage1.getUserAdresse(), listenNumber);
 
                         socketSender.send(packet);
+
+                        // on préviens aussi le controller qu'un nouvel user et arrivé
+                        controller.addUser(controlMessage1.getUserName(), controlMessage1.getUserAdresse());
                     }
                 }
             }

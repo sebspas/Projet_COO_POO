@@ -60,7 +60,7 @@ public class Contacts extends GuiElement {
         controller.addUserToPanel(user.getPseudo(), panelUser);
 
         panel.add(panelUser);
-        System.out.println("Nouvel user !");
+        panel.revalidate();
     }
 
     @Override
