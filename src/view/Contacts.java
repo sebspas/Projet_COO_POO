@@ -12,6 +12,8 @@ public class Contacts extends GuiElement {
 
     private Controller controller;
 
+    private JPanel panel;
+
     public Contacts(Controller controller){
         this.controller = controller;
 
@@ -23,7 +25,7 @@ public class Contacts extends GuiElement {
         this.setTitle("Contacts - ChatWithBoo");
         this.setPreferredSize(new Dimension(400,800));
 
-        JPanel panel = new JPanel();
+        panel = new JPanel();
         panel.setLayout(new GridLayout(20, 1));
         panel.setBorder(new EmptyBorder(20,20,20,20));
 
@@ -44,6 +46,21 @@ public class Contacts extends GuiElement {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
         this.setVisible(true);
+    }
+
+    public void addNewUser(User user) {
+
+        GUIFactory guiFactory = new GUIFactory(controller);
+        Message msg = (Message) guiFactory.createGui("Message", user);
+        msg.setDest(user);
+
+        controller.addUserToChat(user.getPseudo(), msg);
+
+        PanelUserContact panelUser = new PanelUserContact(user, msg);
+        controller.addUserToPanel(user.getPseudo(), panelUser);
+
+        panel.add(panelUser);
+        System.out.println("Nouvel user !");
     }
 
     @Override

@@ -44,4 +44,13 @@ public class Message implements Serializable {
         Text
     }
 
+    @Override
+    public String toString() {
+        return "Message{" +
+                "type=" + type +
+                ", data='" + data + '\'' +
+                ", destPseudo='" + destPseudo + '\'' +
+                ", srcPseudo='" + srcPseudo + '\'' +
+                '}';
+    }
 }

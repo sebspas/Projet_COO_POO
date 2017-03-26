@@ -41,4 +41,8 @@ public class Model {
     public User getCurrentUser() {
         return currentUser;
     }
+
+    public void addUser(User user) {
+        this.allUsers.addUser(user);
+    }
 }

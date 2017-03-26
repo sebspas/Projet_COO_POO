@@ -1,5 +1,7 @@
 package network;
 
+import controller.Controller;
+
 import java.io.*;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -15,6 +17,8 @@ public class Network extends Thread {
     private int cptSockect = 1;
 
     private HashMap<String, CommunicationSocket> UserToSocket;
+
+    private Controller controller;
 
     public byte[] convertObjToData(Object obj) {
         try {
@@ -51,7 +55,9 @@ public class Network extends Thread {
         return UserToSocket.get(username);
     }
 
-    public Network() {
+    public Network(Controller controller) {
+        this.controller = controller;
+
         UserToSocket = new HashMap<>();
         try {
             socketSender = new DatagramSocket();
@@ -62,7 +68,7 @@ public class Network extends Thread {
             socketSender.setBroadcast(true);
             // message à envoyer
             // création du packet
-            ControlMessage controlMessage = new ControlMessage("xkr0", InetAddress.getLocalHost(), -1, "hello");
+            ControlMessage controlMessage = new ControlMessage("tahel", InetAddress.getLocalHost(), -1, "hello");
             byte[] data = convertObjToData(controlMessage);
 
             DatagramPacket packet = new DatagramPacket(data, data.length, InetAddress.getByName("255.255.255.255"), listenNumber);
@@ -102,7 +108,7 @@ public class Network extends Thread {
                     int newPortForReceive = listenNumber + cptSockect;
                     cptSockect++;
                     ControlMessage controlMessageSocket = new ControlMessage(
-                            "xkr0",
+                            "tahel",
                             InetAddress.getLocalHost(),
                             newPortForReceive,
                             "socket_created");
@@ -116,6 +122,9 @@ public class Network extends Thread {
                     // on crée une Communication socket pour cet user
                     CommunicationSocket newComSock = new CommunicationSocket(controlMessage1.getUserAdresse(), newPortForReceive);
                     UserToSocket.put(controlMessage1.getUserName(), newComSock);
+
+                    // on préviens aussi le controller qu'un nouvel user et arrivé
+                    controller.addUser(controlMessage1.getUserName(), controlMessage1.getUserAdresse());
 
                 } else if (controlMessage1.getData().equals("socket_created")) {
                     System.out.println("Socket Created received !");
@@ -141,7 +150,7 @@ public class Network extends Thread {
 
                         // on envoie les informatiosn de la nouvelle socket
                         ControlMessage controlMessageSocket = new ControlMessage(
-                                "xkr0",
+                                "tahel",
                                 InetAddress.getLocalHost(),
                                 newPortForReceive,
                                 "socket_created");
