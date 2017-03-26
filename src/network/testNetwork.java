@@ -6,7 +6,7 @@ import java.util.Scanner;
  * Created by FatePc on 3/25/2017.
  */
 public class testNetwork {
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         Network n = new Network();
 
         Scanner scan = new Scanner(System.in);
@@ -19,5 +19,5 @@ public class testNetwork {
 
             n.getSocket(dest).sendMsg(new Message(Message.DataType.Text, msg, dest, "tahel"));
         }
-    }
+    }*/
 }

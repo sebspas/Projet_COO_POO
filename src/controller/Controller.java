@@ -27,7 +27,6 @@ public class Controller {
 
     public Controller() {
         model = new Model();
-        network = new Network(this);
 
         guiFactory = new GUIFactory(this);
 
@@ -40,6 +39,7 @@ public class Controller {
     public void buttonLoginClicked(String pseudo) {
         try {
             if (model.connectChat(pseudo, Inet4Address.getLocalHost())) {
+                network = new Network(this);
                 mainWindows = (Contacts) guiFactory.createGui("Contacts", null);
                 login.close();
             } else {
@@ -66,6 +66,10 @@ public class Controller {
         User u1 = new User(name, ip);
         model.addUser(u1);
         mainWindows.addNewUser(u1);
+    }
+
+    public User getCurrentUser() {
+        return model.getCurrentUser();
     }
 
     public static void main(String[] args) {
