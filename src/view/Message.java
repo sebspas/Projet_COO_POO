@@ -70,7 +70,7 @@ public class Message extends GuiElement {
                         sendtext.getText(),
                         dest.getPseudo(),
                         controller.getCurrentUser().getPseudo()));
-                discussion.append(controller.getCurrentUser().getPseudo() + " : " + sendtext.getText());
+                discussion.append(controller.getCurrentUser().getPseudo() + " : " + sendtext.getText() + "\n");
                 sendtext.setText("");
             }
         });
@@ -181,6 +181,7 @@ public class Message extends GuiElement {
     }
 
     public void addMessage(String data) {
-        discussion.append(data);
+        discussion.append(dest.getPseudo() + " : " + data + "\n");
+        discussion.revalidate();
     }
 }

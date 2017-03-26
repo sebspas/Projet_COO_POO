@@ -82,6 +82,6 @@ public class Controller {
     }
 
     public void deliverMessage(network.Message msg) {
-        usertToChat.get(msg.getDestPseudo()).addMessage(msg.getData());
+        usertToChat.get(msg.getSrcPseudo()).addMessage(msg.getData());
     }
 }
