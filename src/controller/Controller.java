@@ -40,8 +40,8 @@ public class Controller {
     public void buttonLoginClicked(String pseudo) {
         try {
             if (model.connectChat(pseudo, Inet4Address.getLocalHost())) {
-                network = new Network(this);
                 mainWindows = (Contacts) guiFactory.createGui("Contacts", null);
+                network = new Network(this);
                 login.close();
             } else {
                 login.notif("Connection impossible");
