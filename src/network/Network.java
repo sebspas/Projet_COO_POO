@@ -66,7 +66,7 @@ public class Network extends Thread {
                 // Iterate all IP addresses assigned to each card...
                 for (Enumeration inetAddrs = iface.getInetAddresses(); inetAddrs.hasMoreElements();) {
                     InetAddress inetAddr = (InetAddress) inetAddrs.nextElement();
-                    if (!inetAddr.isLoopbackAddress()) {
+                    if (!inetAddr.isLoopbackAddress() && !inetAddr.toString().equals("127.0.0.1")) {
 
                         if (inetAddr.isSiteLocalAddress()) {
                             // Found non-loopback site-local address. Return it immediately...
