@@ -22,7 +22,7 @@ public class User {
     public User(String pseudo, InetAddress ip) {
         this.pseudo = pseudo;
         this.ip = ip;
-        this.status = Status.Offline;
+        this.status = Status.Online;
 
         this.icon = new ImageIcon("images/contact.png");
     }

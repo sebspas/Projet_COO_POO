@@ -6,6 +6,8 @@ import model.User;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.net.Inet4Address;
@@ -20,6 +22,8 @@ public class Message extends GuiElement {
     private Controller controller;
 
     private User dest;
+
+    JTextArea discussion;
 
     public Message(Controller controller, User dest) {
         this.controller = controller;
@@ -50,7 +54,7 @@ public class Message extends GuiElement {
 
         JLabel imageUser = new JLabel(dest.getIcon());
 
-        JTextArea discussion = new JTextArea();
+        discussion = new JTextArea();
         discussion.setEditable(false);
         discussion.setRows(20);
 
@@ -58,6 +62,18 @@ public class Message extends GuiElement {
         sendtext.setRows(3);
 
         JButton send = new JButton("Send");
+        send.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                controller.sendToUser(dest, new network.Message(network.Message.DataType.Text,
+                        sendtext.getText(),
+                        dest.getPseudo(),
+                        controller.getCurrentUser().getPseudo()));
+                discussion.append(controller.getCurrentUser().getPseudo() + " : " + sendtext.getText());
+                sendtext.setText("");
+            }
+        });
 
         JToolBar toolBar = new JToolBar();
         JButton sendEmotes = new JButton("Emotes");
@@ -162,5 +178,9 @@ public class Message extends GuiElement {
             e.printStackTrace();
         }
 
+    }
+
+    public void addMessage(String data) {
+        discussion.append(data);
     }
 }

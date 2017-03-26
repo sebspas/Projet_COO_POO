@@ -2,8 +2,9 @@ package controller;
 
 import model.Model;
 import model.User;
-import network.Network;
+import network.*;
 import view.*;
+import view.Message;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -76,4 +77,11 @@ public class Controller {
         Controller controller = new Controller();
     }
 
+    public void sendToUser(User dest, network.Message msg) {
+        network.getSocket(dest.getPseudo()).sendMsg(msg);
+    }
+
+    public void deliverMessage(network.Message msg) {
+        usertToChat.get(msg.getDestPseudo()).addMessage(msg.getData());
+    }
 }

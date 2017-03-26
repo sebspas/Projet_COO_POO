@@ -173,7 +173,7 @@ public class Network extends Thread {
                     socketSender.send(packet);
 
                     // on crée une Communication socket pour cet user
-                    CommunicationSocket newComSock = new CommunicationSocket(controlMessage1.getUserAdresse(), newPortForReceive);
+                    CommunicationSocket newComSock = new CommunicationSocket(controlMessage1.getUserAdresse(), newPortForReceive, controller);
                     UserToSocket.put(controlMessage1.getUserName(), newComSock);
 
                     // on préviens aussi le controller qu'un nouvel user et arrivé
@@ -195,7 +195,7 @@ public class Network extends Thread {
                         int newPortForReceive = listenNumber + cptSockect;
                         cptSockect++;
                         // on crée une socket
-                        CommunicationSocket newComSock = new CommunicationSocket(controlMessage1.getUserAdresse(), newPortForReceive);
+                        CommunicationSocket newComSock = new CommunicationSocket(controlMessage1.getUserAdresse(), newPortForReceive, controller);
                         UserToSocket.put(controlMessage1.getUserName(), newComSock);
 
                         // on update le port de dest pour cette socket

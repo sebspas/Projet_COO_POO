@@ -1,5 +1,7 @@
 package network;
 
+import controller.Controller;
+
 import java.io.*;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -27,7 +29,9 @@ public class CommunicationSocket extends Thread {
 
     private ArrayList<Message> messages;
 
-    public CommunicationSocket(InetAddress destip, int port) {
+    private Controller controller;
+
+    public CommunicationSocket(InetAddress destip, int port, Controller controller) {
         try {
             this.portSocketLocal = port;
             this.destip = destip;
@@ -35,7 +39,7 @@ public class CommunicationSocket extends Thread {
         } catch (SocketException e) {
             e.printStackTrace();
         }
-
+        this.controller = controller;
         messages = new ArrayList<>();
         System.out.println("Socket crée sur le port : " + port);
         this.start();
@@ -53,8 +57,8 @@ public class CommunicationSocket extends Thread {
 
                 // on reconvertit en ControlMessage
                 Message message = convertDataToMessage(dataReceive);
-                System.out.println("message reçue :" + message);
-
+                //System.out.println("message reçue :" + message);
+                controller.deliverMessage(message);
             } catch (Exception e) {
                 e.printStackTrace();
             }
