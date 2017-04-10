@@ -19,15 +19,12 @@ import java.net.UnknownHostException;
  */
 public class Message extends GuiElement {
 
-    private Controller controller;
-
     private User dest;
 
     JTextArea discussion;
 
-    public Message(Controller controller, User dest) {
-        this.controller = controller;
-        this.dest = dest;
+    public Message() {
+        super();
         initComponents();
     }
 
@@ -66,11 +63,11 @@ public class Message extends GuiElement {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                controller.sendToUser(dest, new network.Message(network.Message.DataType.Text,
+                Controller.getInstance().sendToUser(dest, new network.Message(network.Message.DataType.Text,
                         sendtext.getText(),
                         dest.getPseudo(),
-                        controller.getCurrentUser().getPseudo()));
-                discussion.append(controller.getCurrentUser().getPseudo() + " : " + sendtext.getText() + "\n");
+                        Controller.getInstance().getCurrentUser().getPseudo()));
+                discussion.append(Controller.getInstance().getCurrentUser().getPseudo() + " : " + sendtext.getText() + "\n");
                 sendtext.setText("");
             }
         });
@@ -170,8 +167,8 @@ public class Message extends GuiElement {
         try {
             User user = new User("Coucou", Inet4Address.getLocalHost());
 
-            Message msg = new Message(null, user);
-
+            Message msg = new Message();
+            msg.setDest(user);
             msg.setVisible(true);
 
         } catch (UnknownHostException e) {

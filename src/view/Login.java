@@ -9,16 +9,13 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 
 public class Login extends GuiElement {
 
-    private Controller controller;
-
     private JLabel labelError;
 
-    public Login(Controller controller) {
-        this.controller = controller;
+    public Login() {
+        super();
         initComponents();
     }
 
@@ -40,7 +37,7 @@ public class Login extends GuiElement {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(username.getText() != null && username.getText().length() != 0) {
-                    controller.buttonLoginClicked(username.getText());
+                    Controller.getInstance().buttonLoginClicked(username.getText());
                 } else {
                     notif("Merci de renseigner un pseudo valide !");
                 }

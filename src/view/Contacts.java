@@ -2,21 +2,16 @@ package view;
 
 import controller.Controller;
 import model.User;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.util.HashMap;
 
 public class Contacts extends GuiElement {
 
-    private Controller controller;
-
     private JPanel panel;
 
-    public Contacts(Controller controller){
-        this.controller = controller;
-
+    public Contacts(){
+        super();
         this.initComponents();
     }
 
@@ -30,15 +25,14 @@ public class Contacts extends GuiElement {
         panel.setBorder(new EmptyBorder(20,20,20,20));
 
         // USER LOCAL
-        User user = controller.getModel().getCurrentUser();
-        GUIFactory guiFactory = new GUIFactory(controller);
-        Message msg = (Message) guiFactory.createGui("Message", user);
+        User user = Controller.getInstance().getModel().getCurrentUser();
+        Message msg = (Message) GUIFactory.createGui(GUIFactory.TypeWindows.MESSAGE);
         msg.setDest(user);
 
-        controller.addUserToChat(user.getPseudo(), msg);
+        Controller.getInstance().addUserToChat(user.getPseudo(), msg);
 
         PanelUserContact panelUser = new PanelUserContact(user, msg);
-        controller.addUserToPanel(user.getPseudo(), panelUser);
+        Controller.getInstance().addUserToPanel(user.getPseudo(), panelUser);
         panel.add(panelUser);
 
         this.add(panel);
@@ -50,14 +44,13 @@ public class Contacts extends GuiElement {
 
     public void addNewUser(User user) {
 
-        GUIFactory guiFactory = new GUIFactory(controller);
-        Message msg = (Message) guiFactory.createGui("Message", user);
+        Message msg = (Message) GUIFactory.createGui(GUIFactory.TypeWindows.MESSAGE);
         msg.setDest(user);
 
-        controller.addUserToChat(user.getPseudo(), msg);
+        Controller.getInstance().addUserToChat(user.getPseudo(), msg);
 
         PanelUserContact panelUser = new PanelUserContact(user, msg);
-        controller.addUserToPanel(user.getPseudo(), panelUser);
+        Controller.getInstance().addUserToPanel(user.getPseudo(), panelUser);
 
         panel.add(panelUser);
         panel.revalidate();

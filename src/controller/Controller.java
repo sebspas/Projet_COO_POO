@@ -13,12 +13,11 @@ import java.util.HashMap;
 
 public class Controller {
 
+    /* Model who control the collected data of the user on the network  */
     private Model model;
 
     private GuiElement login;
     private Contacts mainWindows;
-
-    private GUIFactory guiFactory;
 
     private HashMap<String, PanelUserContact> userToPanel;
 
@@ -26,21 +25,31 @@ public class Controller {
 
     private Network network;
 
-    public Controller() {
-        model = new Model();
 
-        guiFactory = new GUIFactory(this);
+    /** Instance unique pré-initialisée (singleton) */
+    private static Controller INSTANCE = new Controller();
 
-        userToPanel = new HashMap<>();
-        usertToChat = new HashMap<>();
+    /* Constructeur privé */
+    private Controller() {
 
-        login = guiFactory.createGui("Login", null);
+            model = new Model();
+
+            userToPanel = new HashMap<>();
+            usertToChat = new HashMap<>();
+
+            login = GUIFactory.createGui(GUIFactory.TypeWindows.LOGIN);
+    }
+
+    /** Point d'accès pour l'instance unique du singleton */
+    public static Controller getInstance()
+    {
+        return INSTANCE;
     }
 
     public void buttonLoginClicked(String pseudo) {
         try {
             if (model.connectChat(pseudo, Inet4Address.getLocalHost())) {
-                mainWindows = (Contacts) guiFactory.createGui("Contacts", null);
+                mainWindows = (Contacts) GUIFactory.createGui(GUIFactory.TypeWindows.CONTACTS);
                 network = new Network(this);
                 login.close();
             } else {
@@ -74,7 +83,8 @@ public class Controller {
     }
 
     public static void main(String[] args) {
-        Controller controller = new Controller();
+
+        Controller controller = Controller.getInstance();
     }
 
     public void sendToUser(User dest, network.Message msg) {

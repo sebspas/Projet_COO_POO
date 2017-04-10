@@ -56,7 +56,7 @@ public class CommunicationSocket extends Thread {
                 byte[] dataReceive = incomingPacket.getData();
 
                 // on reconvertit en ControlMessage
-                Message message = convertDataToMessage(dataReceive);
+                Message message = networkUtils.convertDataToMessage(dataReceive);
                 //System.out.println("message reçue :" + message);
                 controller.deliverMessage(message);
             } catch (Exception e) {
@@ -65,37 +65,8 @@ public class CommunicationSocket extends Thread {
         }
     }
 
-    private Message convertDataToMessage(byte[] dataReceive) {
-        try {
-            ByteArrayInputStream in = new ByteArrayInputStream(dataReceive);
-            ObjectInputStream is = null;
-            is = new ObjectInputStream(in);
-            Message msg = (Message) is.readObject();
-            return msg;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public byte[] convertObjToData(Object obj) {
-        try {
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            ObjectOutputStream os = null;
-            os = new ObjectOutputStream(outputStream);
-            os.writeObject(obj);
-            byte[] data = outputStream.toByteArray();
-            return data;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public void sendMsg(Message msg) {
-        byte[] data = convertObjToData(msg);
+        byte[] data = networkUtils.convertObjToData(msg);
         DatagramPacket packet = new DatagramPacket(data, data.length, destip, portSocketDest);
         try {
             socket.send(packet);
