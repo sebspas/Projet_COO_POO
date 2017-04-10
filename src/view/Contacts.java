@@ -26,8 +26,7 @@ public class Contacts extends GuiElement {
 
         // USER LOCAL
         User user = Controller.getInstance().getModel().getCurrentUser();
-        Message msg = (Message) GUIFactory.createGui(GUIFactory.TypeWindows.MESSAGE);
-        msg.setDest(user);
+        Message msg = (Message) GUIFactory.createGui(GUIFactory.TypeWindows.MESSAGE, user);
 
         Controller.getInstance().addUserToChat(user.getPseudo(), msg);
 
@@ -44,8 +43,7 @@ public class Contacts extends GuiElement {
 
     public void addNewUser(User user) {
 
-        Message msg = (Message) GUIFactory.createGui(GUIFactory.TypeWindows.MESSAGE);
-        msg.setDest(user);
+        Message msg = (Message) GUIFactory.createGui(GUIFactory.TypeWindows.MESSAGE, user);
 
         Controller.getInstance().addUserToChat(user.getPseudo(), msg);
 

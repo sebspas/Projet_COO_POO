@@ -13,15 +13,23 @@ public class GUIFactory {
         CONTACTS
     }
 
+    public static GuiElement createGui(TypeWindows typeWindows, User user) {
+        return switchCreate(typeWindows, user);
+    }
+
     public static GuiElement createGui(TypeWindows typeWindows) {
-            switch(typeWindows) {
-                case LOGIN   :   return new Login();
-                case MESSAGE : return new Contacts();
-                case CONTACTS: return new Message();
-                default :
-                    System.out.println("Element de GUI inexistant !");
-                    return null;
-            }
+        return switchCreate(typeWindows, null);
+    }
+
+    private static GuiElement switchCreate(TypeWindows typeWindows, User user) {
+        switch(typeWindows) {
+            case LOGIN   :   return new Login();
+            case CONTACTS : return new Contacts();
+            case MESSAGE: return new Message(user);
+            default :
+                System.out.println("Element de GUI inexistant !");
+                return null;
+        }
     }
 
 }

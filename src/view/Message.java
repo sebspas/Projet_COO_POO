@@ -23,8 +23,9 @@ public class Message extends GuiElement {
 
     JTextArea discussion;
 
-    public Message() {
+    public Message(User user) {
         super();
+        this.dest = user;
         initComponents();
     }
 
@@ -167,8 +168,7 @@ public class Message extends GuiElement {
         try {
             User user = new User("Coucou", Inet4Address.getLocalHost());
 
-            Message msg = new Message();
-            msg.setDest(user);
+            Message msg = new Message(user);
             msg.setVisible(true);
 
         } catch (UnknownHostException e) {
