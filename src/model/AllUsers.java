@@ -34,4 +34,14 @@ public class AllUsers {
         return true;
     }
 
+    public boolean contains(String pseudo) {
+        for (User u: listUsers
+             ) {
+            if(u.getPseudo().equals(pseudo)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

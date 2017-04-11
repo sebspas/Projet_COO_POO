@@ -13,6 +13,10 @@ public class Model {
 
     private User currentUser;
 
+    public boolean contains(String name) {
+        return allUsers.contains(name);
+    }
+
     public enum State {
         Disconnected,
         Connected
