@@ -18,17 +18,14 @@ public class Network extends Thread {
 
     private HashMap<String, CommunicationSocket> UserToSocket;
 
-    private Controller controller;
-
     private User currentUser;
 
     public CommunicationSocket getSocket(String username) {
         return UserToSocket.get(username);
     }
 
-    public Network(Controller controller) {
-        this.controller = controller;
-        this.currentUser = controller.getCurrentUser();
+    public Network() {
+        this.currentUser = Controller.getInstance().getCurrentUser();
 
         UserToSocket = new HashMap<>();
         try {
@@ -54,6 +51,23 @@ public class Network extends Thread {
         }
 
         this.start();
+    }
+
+    public void sendDisconnect() {
+        try {
+            // broadcast a vrai
+            socketSender.setBroadcast(true);
+            ControlMessage controlMessage = new ControlMessage(currentUser.getPseudo(), networkUtils.getLocalHostLANAddress(), -1, "bye");
+            byte[] data = networkUtils.convertObjToData(controlMessage);
+
+            DatagramPacket packet = new DatagramPacket(data, data.length, InetAddress.getByName("255.255.255.255"), listenNumber);
+            socketSender.send(packet);
+
+            System.out.println("Packet disconnect send !");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void run() {
@@ -95,11 +109,11 @@ public class Network extends Thread {
                     socketSender.send(packet);
 
                     // on crée une Communication socket pour cet user
-                    CommunicationSocket newComSock = new CommunicationSocket(controlMessage1.getUserAdresse(), newPortForReceive, controller);
+                    CommunicationSocket newComSock = new CommunicationSocket(controlMessage1.getUserAdresse(), newPortForReceive, Controller.getInstance());
                     UserToSocket.put(controlMessage1.getUserName(), newComSock);
 
                     // on préviens aussi le controller qu'un nouvel user et arrivé
-                    controller.addUser(controlMessage1.getUserName(), controlMessage1.getUserAdresse());
+                    Controller.getInstance().addUser(controlMessage1.getUserName(), controlMessage1.getUserAdresse());
 
                 } else if (controlMessage1.getData().equals("socket_created")) {
                     System.out.println("Socket Created received !");
@@ -117,7 +131,7 @@ public class Network extends Thread {
                         int newPortForReceive = listenNumber + cptSockect;
                         cptSockect++;
                         // on crée une socket
-                        CommunicationSocket newComSock = new CommunicationSocket(controlMessage1.getUserAdresse(), newPortForReceive, controller);
+                        CommunicationSocket newComSock = new CommunicationSocket(controlMessage1.getUserAdresse(), newPortForReceive, Controller.getInstance());
                         UserToSocket.put(controlMessage1.getUserName(), newComSock);
 
                         // on update le port de dest pour cette socket
@@ -137,8 +151,12 @@ public class Network extends Thread {
                         socketSender.send(packet);
 
                         // on préviens aussi le controller qu'un nouvel user et arrivé
-                        controller.addUser(controlMessage1.getUserName(), controlMessage1.getUserAdresse());
+                        Controller.getInstance().addUser(controlMessage1.getUserName(), controlMessage1.getUserAdresse());
                     }
+                } else if(controlMessage1.getData().equals("bye")) {
+                    System.out.println("Ok byeeeeeee.....");
+                    Controller.getInstance().setUserOffLine(controlMessage1.getUserName());
+                    //Controller.getInstance().sendToUser(controlMessage1.getUserName(), "Disconected");
                 }
             }
 

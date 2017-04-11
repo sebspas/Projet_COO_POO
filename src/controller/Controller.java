@@ -50,7 +50,7 @@ public class Controller {
         try {
             if (model.connectChat(pseudo, Inet4Address.getLocalHost())) {
                 mainWindows = (Contacts) GUIFactory.createGui(GUIFactory.TypeWindows.CONTACTS);
-                network = new Network(this);
+                network = new Network();
                 login.close();
             } else {
                 login.notif("Connection impossible");
@@ -62,6 +62,14 @@ public class Controller {
 
     public void addUserToPanel(String name, PanelUserContact panel) {
         this.userToPanel.put(name, panel);
+    }
+
+    public void setUserOffLine(String name) {
+        userToPanel.get(name).setStatus("Offline");
+    }
+
+    public void disconnect() {
+        network.sendDisconnect();
     }
 
     public void addUserToChat(String name, Message msg) {
@@ -82,16 +90,16 @@ public class Controller {
         return model.getCurrentUser();
     }
 
-    public static void main(String[] args) {
-
-        Controller controller = Controller.getInstance();
-    }
-
     public void sendToUser(User dest, network.Message msg) {
         network.getSocket(dest.getPseudo()).sendMsg(msg);
     }
 
     public void deliverMessage(network.Message msg) {
         usertToChat.get(msg.getSrcPseudo()).addMessage(msg.getData());
+    }
+
+    public static void main(String[] args) {
+
+        Controller controller = Controller.getInstance();
     }
 }

@@ -50,4 +50,7 @@ public class PanelUserContact extends JPanel{
         this.add(discuter);
     }
 
+    public void setStatus(String status) {
+        this.status.setText(status);
+    }
 }
