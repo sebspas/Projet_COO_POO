@@ -81,9 +81,17 @@ public class Controller {
     }
 
     public void addUser(String name, InetAddress ip) {
-        User u1 = new User(name, ip);
-        model.addUser(u1);
-        mainWindows.addNewUser(u1);
+        // two cases if user already exist or not
+        if (model.contains(name)) {
+            // user already exist, so we update his status
+            userToPanel.get(name).setStatus("Online");
+        } else {
+            // we create a new user
+            User u1 = new User(name, ip);
+            model.addUser(u1);
+            mainWindows.addNewUser(u1);
+        }
+
     }
 
     public User getCurrentUser() {

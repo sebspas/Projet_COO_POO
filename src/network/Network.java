@@ -110,6 +110,8 @@ public class Network extends Thread {
 
                     // on crée une Communication socket pour cet user
                     CommunicationSocket newComSock = new CommunicationSocket(controlMessage1.getUserAdresse(), newPortForReceive, Controller.getInstance());
+                    // on supprime l'ancienne socket si il y a lieu
+                    UserToSocket.remove(controlMessage1.getUserName());
                     UserToSocket.put(controlMessage1.getUserName(), newComSock);
 
                     // on préviens aussi le controller qu'un nouvel user et arrivé
@@ -132,6 +134,8 @@ public class Network extends Thread {
                         cptSockect++;
                         // on crée une socket
                         CommunicationSocket newComSock = new CommunicationSocket(controlMessage1.getUserAdresse(), newPortForReceive, Controller.getInstance());
+                        // on supprime l'ancienne socket si il y a lieu
+                        UserToSocket.remove(controlMessage1.getUserName());
                         UserToSocket.put(controlMessage1.getUserName(), newComSock);
 
                         // on update le port de dest pour cette socket

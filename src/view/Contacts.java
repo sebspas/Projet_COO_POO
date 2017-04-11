@@ -48,6 +48,7 @@ public class Contacts extends GuiElement {
             @Override
             public void windowClosing(WindowEvent e) {
                 Controller.getInstance().disconnect();
+                System.exit(0);
             }
 
             @Override
