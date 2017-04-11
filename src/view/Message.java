@@ -3,6 +3,7 @@ package view;
 import controller.Controller;
 import model.User;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -10,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
+import java.lang.reflect.Executable;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -39,109 +42,117 @@ public class Message extends GuiElement {
 
     @Override
     public void initComponents() {
-        this.setTitle("Username - Discussion");
-        this.setLayout(new BorderLayout());
-        this.setPreferredSize(new Dimension(500,300));
+        try {
+            this.setTitle(dest.getPseudo() + " - Discussion");
+            this.setLayout(new BorderLayout());
+            this.setPreferredSize(new Dimension(500, 300));
 
-        JPanel panel = new JPanel();
-        panel.setBorder(new EmptyBorder(20,20,20,20));
-        panel.setLayout(new BorderLayout());
+            BackgroundPane backgroundPane = new BackgroundPane();
+            backgroundPane.setBackground(ImageIO.read(new File("images/bg_message.gif")));
+            this.setContentPane(backgroundPane);
 
-        JLabel labelDest = new JLabel("Username");
-        labelDest.setBorder(new EmptyBorder(10, 10, 10, 10));
+            JPanel panel = new JPanel();
+            panel.setBorder(new EmptyBorder(20, 20, 20, 20));
+            panel.setLayout(new BorderLayout());
+            panel.setOpaque(false);
+            panel.setPreferredSize(new Dimension(470, 280));
 
-        JLabel imageUser = new JLabel(dest.getIcon());
+            JLabel imageUser = new JLabel(dest.getIcon());
+            imageUser.setOpaque(false);
 
-        discussion = new JTextArea();
-        discussion.setEditable(false);
-        discussion.setRows(20);
+            discussion = new JTextArea();
+            discussion.setEditable(false);
+            discussion.setRows(20);
+            discussion.setColumns(30);
 
-        JTextArea sendtext = new JTextArea();
-        sendtext.setRows(3);
+            JTextArea sendtext = new JTextArea();
+            sendtext.setRows(3);
 
-        JButton send = new JButton("Send");
-        send.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            JButton send = new JButton("Send");
+            send.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
 
-                Controller.getInstance().sendToUser(dest, new network.Message(network.Message.DataType.Text,
-                        sendtext.getText(),
-                        dest.getPseudo(),
-                        Controller.getInstance().getCurrentUser().getPseudo()));
-                discussion.append(Controller.getInstance().getCurrentUser().getPseudo() + " : " + sendtext.getText() + "\n");
-                sendtext.setText("");
-            }
-        });
+                    Controller.getInstance().sendToUser(dest, new network.Message(network.Message.DataType.Text,
+                            sendtext.getText(),
+                            dest.getPseudo(),
+                            Controller.getInstance().getCurrentUser().getPseudo()));
+                    discussion.append(Controller.getInstance().getCurrentUser().getPseudo() + " : " + sendtext.getText() + "\n");
+                    sendtext.setText("");
+                }
+            });
 
-        JToolBar toolBar = new JToolBar();
-        JButton sendEmotes = new JButton("Emotes");
-        JButton sendFiles = new JButton("Files");
-        toolBar.add(sendEmotes);
-        toolBar.add(sendFiles);
+            //JToolBar toolBar = new JToolBar();
+            JButton sendFiles = new JButton("Files");
+            //toolBar.add(sendFiles);
 
-        JPanel panel_top = new JPanel();
-        panel_top.setLayout(new BorderLayout());
-
-        panel_top.add(imageUser, BorderLayout.NORTH);
-        panel_top.add(labelDest, BorderLayout.WEST);
-        panel_top.add(discussion, BorderLayout.CENTER);
-
-        JPanel panel_bot = new JPanel();
-        panel_bot.setLayout(new BorderLayout());
-
-
-
-        panel_bot.add(sendtext, BorderLayout.CENTER);
-        panel_bot.add(toolBar, BorderLayout.NORTH);
-        panel_bot.add(send, BorderLayout.EAST);
+            JPanel panel_top_right = new JPanel();
+            panel_top_right.setLayout(new BorderLayout());
+            panel_top_right.setOpaque(false);
+            //panel_top.add(imageUser, BorderLayout.NORTH);
+            //panel_top.add(labelDest, BorderLayout.WEST);
+            panel_top_right.add(discussion, BorderLayout.CENTER);
 
 
+            JPanel panel_bot = new JPanel();
+            panel_bot.setLayout(new BorderLayout());
+            panel_bot.setOpaque(false);
 
-        panel.add(panel_top, BorderLayout.CENTER);
-        panel.add(panel_bot, BorderLayout.SOUTH);
 
-        this.add(panel);
+            panel_bot.add(sendtext, BorderLayout.CENTER);
+            panel_bot.add(sendFiles, BorderLayout.NORTH);
+            panel_bot.add(send, BorderLayout.EAST);
 
-        this.setResizable(false);
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        this.addWindowListener(new WindowListener() {
-            @Override
-            public void windowOpened(WindowEvent e) {
 
-            }
+            panel.add(panel_top_right, BorderLayout.EAST);
+            panel.add(imageUser, BorderLayout.WEST);
+            panel.add(panel_bot, BorderLayout.SOUTH);
 
-            @Override
-            public void windowClosing(WindowEvent e) {
-                Message.super.close();
-            }
+            this.add(panel);
 
-            @Override
-            public void windowClosed(WindowEvent e) {
+            this.setResizable(false);
+            this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            this.addWindowListener(new WindowListener() {
+                @Override
+                public void windowOpened(WindowEvent e) {
 
-            }
+                }
 
-            @Override
-            public void windowIconified(WindowEvent e) {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    Message.super.close();
+                }
 
-            }
+                @Override
+                public void windowClosed(WindowEvent e) {
 
-            @Override
-            public void windowDeiconified(WindowEvent e) {
+                }
 
-            }
+                @Override
+                public void windowIconified(WindowEvent e) {
 
-            @Override
-            public void windowActivated(WindowEvent e) {
+                }
 
-            }
+                @Override
+                public void windowDeiconified(WindowEvent e) {
 
-            @Override
-            public void windowDeactivated(WindowEvent e) {
+                }
 
-            }
-        });
-        this.pack();
-        this.setVisible(false);
+                @Override
+                public void windowActivated(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowDeactivated(WindowEvent e) {
+
+                }
+            });
+            this.pack();
+            this.setVisible(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

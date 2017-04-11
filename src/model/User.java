@@ -24,7 +24,7 @@ public class User {
         this.ip = ip;
         this.status = Status.Online;
 
-        this.icon = new ImageIcon("images/contact.png");
+        this.icon = new ImageIcon("images/user.png");
     }
 
     public Status getStatus() {

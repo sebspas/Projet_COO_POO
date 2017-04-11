@@ -3,6 +3,7 @@ package view;
 import model.User;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Created by tahel on 08/03/17.
