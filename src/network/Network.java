@@ -3,32 +3,36 @@ package network;
 import controller.Controller;
 import model.User;
 
-import java.io.*;
-import java.net.*;
-import java.util.Enumeration;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.util.HashMap;
 
+/**
+ * The network, it control everything in link with controlMessage, and socket creation
+ * each time we have a new user we create a new socket to communicate with him
+ */
 public class Network extends Thread {
-
+    // 1 socket to send data
     private DatagramSocket socketSender;
+    // 1 socket to receive data
     private DatagramSocket socketReceiver;
-
+    // the main port of the app
     private int listenNumber = 15530;
+    // the cpt to not create a socket on the same port each time we have a new user
     private int cptSockect = 1;
-
+    // For an username we have one communication Sokect
     private HashMap<String, CommunicationSocket> UserToSocket;
 
-    private User currentUser;
-
-    public CommunicationSocket getSocket(String username) {
-        return UserToSocket.get(username);
-    }
-
+    /**
+     * Constructor of the network object, and send a "hello" control message in broadcast
+     */
     public Network() {
-        this.currentUser = Controller.getInstance().getCurrentUser();
-
-        UserToSocket = new HashMap<>();
         try {
+            UserToSocket = new HashMap<>();
+
             socketSender = new DatagramSocket();
             /*****************************************
              /* Broadcast à l'arrivé sur le reseaux
@@ -38,10 +42,12 @@ public class Network extends Thread {
             // message à envoyer
             NetworkInterface.getNetworkInterfaces();
             // création du packet
-            ControlMessage controlMessage = new ControlMessage(currentUser.getPseudo(), networkUtils.getLocalHostLANAddress(), -1, "hello");
+            ControlMessage controlMessage = new ControlMessage(Controller.getInstance().getCurrentUser().getPseudo(),
+                    networkUtils.getLocalHostLANAddress(), -1, "hello");
             byte[] data = networkUtils.convertObjToData(controlMessage);
 
-            DatagramPacket packet = new DatagramPacket(data, data.length, InetAddress.getByName("255.255.255.255"), listenNumber);
+            DatagramPacket packet = new DatagramPacket(data, data.length,
+                    InetAddress.getByName("255.255.255.255"), listenNumber);
 
             socketSender.send(packet);
             System.out.println("Packet Hello envoyé");
@@ -53,11 +59,24 @@ public class Network extends Thread {
         this.start();
     }
 
+    /**
+     * Get the communicationSocket corresponding to the username
+     * @param username the username of the user
+     * @return the communicationSocket
+     */
+    public CommunicationSocket getSocket(String username) {
+        return UserToSocket.get(username);
+    }
+
+    /**
+     * Send a disconnect message to all the user on the network
+     */
     public void sendDisconnect() {
         try {
             // broadcast a vrai
             socketSender.setBroadcast(true);
-            ControlMessage controlMessage = new ControlMessage(currentUser.getPseudo(), networkUtils.getLocalHostLANAddress(), -1, "bye");
+            ControlMessage controlMessage = new ControlMessage(Controller.getInstance().getCurrentUser().getPseudo(),
+                    networkUtils.getLocalHostLANAddress(), -1, "bye");
             byte[] data = networkUtils.convertObjToData(controlMessage);
 
             DatagramPacket packet = new DatagramPacket(data, data.length, InetAddress.getByName("255.255.255.255"), listenNumber);
@@ -67,9 +86,11 @@ public class Network extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
+    /**
+     * Run a thread wo collect all the incoming message and do the associate action
+     */
     public void run() {
         try {
 
@@ -88,7 +109,7 @@ public class Network extends Thread {
 
                 // on reconvertit en ControlMessage
                 ControlMessage controlMessage1 = networkUtils.convertDataToControlMessage(dataReceive);
-                if (controlMessage1.getUserName().equals(currentUser.getPseudo())) {
+                if (controlMessage1.getUserName().equals(Controller.getInstance().getCurrentUser().getPseudo())) {
                     continue;
                 }
                 if (controlMessage1.getData().equals("hello")) {
@@ -97,19 +118,18 @@ public class Network extends Thread {
                     int newPortForReceive = listenNumber + cptSockect;
                     cptSockect++;
                     ControlMessage controlMessageSocket = new ControlMessage(
-                            currentUser.getPseudo(),
+                            Controller.getInstance().getCurrentUser().getPseudo(),
                             InetAddress.getLocalHost(),
                             newPortForReceive,
                             "socket_created");
 
-
+                    // send the message
                     byte[] data = networkUtils.convertObjToData(controlMessageSocket);
                     DatagramPacket packet = new DatagramPacket(data, data.length, controlMessage1.getUserAdresse(), listenNumber);
-
                     socketSender.send(packet);
 
                     // on crée une Communication socket pour cet user
-                    CommunicationSocket newComSock = new CommunicationSocket(controlMessage1.getUserAdresse(), newPortForReceive, Controller.getInstance());
+                    CommunicationSocket newComSock = new CommunicationSocket(controlMessage1.getUserAdresse(), newPortForReceive);
                     // on supprime l'ancienne socket si il y a lieu
                     UserToSocket.remove(controlMessage1.getUserName());
                     UserToSocket.put(controlMessage1.getUserName(), newComSock);
@@ -119,12 +139,8 @@ public class Network extends Thread {
 
                 } else if (controlMessage1.getData().equals("socket_created")) {
                     System.out.println("Socket Created received !");
-                    // on récupére le port sur lequel on devra envoyer
-                    int portForSend = controlMessage1.getPort();
-
                     if (UserToSocket.containsKey(controlMessage1.getUserName())) {
                         // si l'utilisateur à déja une socket associé
-                        // cas 3
                         // on update le port de destination pour cette communication
                         CommunicationSocket communicationSocket = UserToSocket.get(controlMessage1.getUserName());
                         communicationSocket.setPortSocketDest(controlMessage1.getPort());
@@ -133,7 +149,7 @@ public class Network extends Thread {
                         int newPortForReceive = listenNumber + cptSockect;
                         cptSockect++;
                         // on crée une socket
-                        CommunicationSocket newComSock = new CommunicationSocket(controlMessage1.getUserAdresse(), newPortForReceive, Controller.getInstance());
+                        CommunicationSocket newComSock = new CommunicationSocket(controlMessage1.getUserAdresse(), newPortForReceive);
                         // on supprime l'ancienne socket si il y a lieu
                         UserToSocket.remove(controlMessage1.getUserName());
                         UserToSocket.put(controlMessage1.getUserName(), newComSock);
@@ -143,15 +159,13 @@ public class Network extends Thread {
 
                         // on envoie les informatiosn de la nouvelle socket
                         ControlMessage controlMessageSocket = new ControlMessage(
-                                currentUser.getPseudo(),
+                                Controller.getInstance().getCurrentUser().getPseudo(),
                                 InetAddress.getLocalHost(),
                                 newPortForReceive,
                                 "socket_created");
 
-
                         byte[] data = networkUtils.convertObjToData(controlMessageSocket);
                         DatagramPacket packet = new DatagramPacket(data, data.length, controlMessage1.getUserAdresse(), listenNumber);
-
                         socketSender.send(packet);
 
                         // on préviens aussi le controller qu'un nouvel user et arrivé
@@ -160,7 +174,6 @@ public class Network extends Thread {
                 } else if(controlMessage1.getData().equals("bye")) {
                     System.out.println("Ok byeeeeeee.....");
                     Controller.getInstance().setUserOffLine(controlMessage1.getUserName());
-                    //Controller.getInstance().sendToUser(controlMessage1.getUserName(), "Disconected");
                 }
             }
 

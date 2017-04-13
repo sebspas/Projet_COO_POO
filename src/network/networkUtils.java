@@ -7,10 +7,16 @@ import java.net.UnknownHostException;
 import java.util.Enumeration;
 
 /**
- * Created by FatePc on 4/10/2017.
+ * Libs of a lot of useful function for the network
  */
 public class networkUtils {
 
+    /**
+     * Check all the networkInterface, and for each of them check all the IPAdress
+     * until there is a valid one (non local, non loopback)
+     * @return the good InetAdress
+     * @throws UnknownHostException
+     */
     public static InetAddress getLocalHostLANAddress() throws UnknownHostException {
         try {
             InetAddress candidateAddress = null;
@@ -49,6 +55,11 @@ public class networkUtils {
         }
     }
 
+    /**
+     * Convert the array of byte received into a ControlMessage
+     * @param dataReceive the byte[] received
+     * @return the ControlMessage
+     */
     public static ControlMessage convertDataToControlMessage(byte[] dataReceive) {
 
         try {
@@ -65,6 +76,11 @@ public class networkUtils {
         return null;
     }
 
+    /**
+     * Convert the array of byte received into a Message
+     * @param dataReceive the byte[] received
+     * @return the Message
+     */
     public static Message convertDataToMessage(byte[] dataReceive) {
         try {
             ByteArrayInputStream in = new ByteArrayInputStream(dataReceive);
@@ -79,6 +95,11 @@ public class networkUtils {
         return null;
     }
 
+    /**
+     * Convert the obj to send to an array of byte[]
+     * @param obj the ocj to send
+     * @return byte[] containing  the object
+     */
     public static byte[] convertObjToData(Object obj) {
         try {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
