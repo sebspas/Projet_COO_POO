@@ -142,8 +142,7 @@ public class Network extends Thread {
                     if (UserToSocket.containsKey(controlMessage1.getUserName())) {
                         // si l'utilisateur à déja une socket associé
                         // on update le port de destination pour cette communication
-                        CommunicationSocket communicationSocket = UserToSocket.get(controlMessage1.getUserName());
-                        communicationSocket.setPortSocketDest(controlMessage1.getPort());
+                        UserToSocket.get(controlMessage1.getUserName()).setPortSocketDest(controlMessage1.getPort());
                     } else {
                         // si l'utilisateur n'a pas de socket associé
                         int newPortForReceive = listenNumber + cptSockect;
