@@ -173,6 +173,8 @@ public class Network extends Thread {
                 } else if(controlMessage1.getData().equals("bye")) {
                     System.out.println("Ok byeeeeeee.....");
                     Controller.getInstance().setUserOffLine(controlMessage1.getUserName());
+                    UserToSocket.get(controlMessage1.getUserName()).closeSocket();
+                    UserToSocket.remove(controlMessage1.getUserName());
                 }
             }
 

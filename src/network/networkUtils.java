@@ -23,6 +23,7 @@ public class networkUtils {
             // Iterate all NICs (network interface cards)...
             for (Enumeration ifaces = NetworkInterface.getNetworkInterfaces(); ifaces.hasMoreElements();) {
                 NetworkInterface iface = (NetworkInterface) ifaces.nextElement();
+                if (iface.isLoopback() || !iface.isUp()) continue;
                 // Iterate all IP addresses assigned to each card...
                 for (Enumeration inetAddrs = iface.getInetAddresses(); inetAddrs.hasMoreElements();) {
                     InetAddress inetAddr = (InetAddress) inetAddrs.nextElement();

@@ -45,9 +45,10 @@ public class CommunicationSocket extends Thread {
                 this.portSocketLocal = port;
             } else {
                 this.socketClient = new Socket(destip, port);
-                reader = new ObjectInputStream(socketClient.getInputStream());
                 writer = new ObjectOutputStream(socketClient.getOutputStream());
+                reader = new ObjectInputStream(socketClient.getInputStream());
                 this.portSocketDest = port;
+                System.out.println("Socket connected");
             }
             //this.socket = new DatagramSocket(port);
         } catch (Exception e) {
@@ -65,8 +66,8 @@ public class CommunicationSocket extends Thread {
             if (type == 1) {
                 System.out.println("Socket en attente");
                 socketClient = socketServer.accept();
-                reader = new ObjectInputStream(socketClient.getInputStream());
                 writer = new ObjectOutputStream(socketClient.getOutputStream());
+                reader = new ObjectInputStream(socketClient.getInputStream());
                 System.out.println("Connexion établie !!!");
             }
 
@@ -115,4 +116,16 @@ public class CommunicationSocket extends Thread {
         this.portSocketDest = portSocketDest;
     }
 
+    public void closeSocket() {
+        try {
+            if (type == 1) {
+                socketServer.close();
+                socketClient.close();
+            } else {
+                socketClient.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
