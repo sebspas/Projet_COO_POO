@@ -119,7 +119,7 @@ public class Network extends Thread {
                     cptSockect++;
                     ControlMessage controlMessageSocket = new ControlMessage(
                             Controller.getInstance().getCurrentUser().getPseudo(),
-                            InetAddress.getLocalHost(),
+                            networkUtils.getLocalHostLANAddress(),
                             newPortForReceive,
                             "socket_created");
 
