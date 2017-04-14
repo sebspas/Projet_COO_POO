@@ -115,9 +115,9 @@ public class CommunicationSocket extends Thread {
                 Controller.getInstance().deliverMessage(message);*/
             }
 
-        } catch (EOFException e) {
+        } /*catch (EOFException e) {
           // it's nothing
-        } catch (SocketException e) {
+        } */catch (SocketException e) {
             System.out.println("Socket Fermée.");
         } catch (Exception e) {
             e.printStackTrace();
