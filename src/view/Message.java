@@ -205,8 +205,8 @@ public class Message extends GuiElement {
 
     }
 
-    public void addMessage(String data) {
-        discussion.append(dest.getPseudo() + " : " + data + "\n");
+    public void addMessage(String data, String source) {
+        discussion.append(source + " : " + data + "\n");
         discussion.revalidate();
     }
 }

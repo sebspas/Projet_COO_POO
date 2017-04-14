@@ -79,6 +79,7 @@ public class CommunicationSocket extends Thread {
                 if(receveid.getType() == Message.DataType.File) {
                     System.out.println("Starting File reception ....");
                     System.out.println("Name of the file : " + receveid.getData());
+                    Controller.getInstance().deliverText(receveid.getSrcPseudo(), "Starting file reception : " + receveid.getData(), "System");
                     // we gotta get a file so we do the following process
                     // we create an empty file with the right format
                     OutputStream receivedFile = new FileOutputStream(System.getProperty("user.dir") + "/" + receveid.getData());
@@ -95,7 +96,7 @@ public class CommunicationSocket extends Thread {
                     receivedFile.close();
 
                     System.out.println("File fully received !");
-
+                    Controller.getInstance().deliverText(receveid.getSrcPseudo(), "File received : " + receveid.getData(), "System");
                 } else {
                     // we get a classic message
                     Controller.getInstance().deliverMessage(receveid);
@@ -114,6 +115,8 @@ public class CommunicationSocket extends Thread {
                 Controller.getInstance().deliverMessage(message);*/
             }
 
+        } catch (EOFException e) {
+          // it's nothing
         } catch (SocketException e) {
             System.out.println("Socket Fermée.");
         } catch (Exception e) {
@@ -139,7 +142,7 @@ public class CommunicationSocket extends Thread {
 
     public void sendFile(File file, String destPseudo) {
         try {
-
+            Controller.getInstance().deliverText(destPseudo, "Starting the file transfert of : " + file.getName(), "System");
             // Send the file format and warn that a file is comming
             Message msg = new Message(Message.DataType.File, file.getName(),
                     destPseudo, Controller.getInstance().getCurrentUser().getPseudo());
@@ -156,8 +159,8 @@ public class CommunicationSocket extends Thread {
                 out.write(bytes, 0, count);
             }
 
-            out.close();
-
+            in.close();
+            Controller.getInstance().deliverText(destPseudo, "File sent !", "System");
             System.out.println("File sent !");
         }catch (Exception e) {
             e.printStackTrace();

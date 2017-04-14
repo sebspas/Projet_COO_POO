@@ -159,7 +159,11 @@ public class Controller {
      * @param msg the message to print
      */
     public void deliverMessage(network.Message msg) {
-        usertToChat.get(msg.getSrcPseudo()).addMessage(msg.getData());
+        usertToChat.get(msg.getSrcPseudo()).addMessage(msg.getData(), msg.getSrcPseudo());
+    }
+
+    public void deliverText(String dest, String Message, String source) {
+        usertToChat.get(dest).addMessage(Message, source);
     }
 
     /**
