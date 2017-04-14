@@ -93,7 +93,6 @@ public class CommunicationSocket extends Thread {
                     }
 
                     receivedFile.close();
-                    in.close();
 
                     System.out.println("File fully received !");
 
@@ -158,7 +157,6 @@ public class CommunicationSocket extends Thread {
             }
 
             out.close();
-            in.close();
 
             System.out.println("File sent !");
         }catch (Exception e) {
