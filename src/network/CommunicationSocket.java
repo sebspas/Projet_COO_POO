@@ -81,7 +81,7 @@ public class CommunicationSocket extends Thread {
                     System.out.println("Name of the file : " + receveid.getData());
                     // we gotta get a file so we do the following process
                     // we create an empty file with the right format
-                    OutputStream receivedFile = new FileOutputStream(System.getProperty("user.dir") + "/download/" + receveid.getData());
+                    OutputStream receivedFile = new FileOutputStream(System.getProperty("user.dir") + "/" + receveid.getData());
                     // temporary inputStream for the trasnfert
                     InputStream in = socketClient.getInputStream();
 
