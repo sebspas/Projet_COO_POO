@@ -12,6 +12,8 @@ import java.util.ArrayList;
  * this is setup on a local port and a port to send at
  */
 public class CommunicationSocket extends Thread {
+
+    protected volatile boolean running = true;
     // The socket used to send with and receive on
     //private DatagramSocket socket;
     private ServerSocket socketServer;
@@ -63,7 +65,7 @@ public class CommunicationSocket extends Thread {
      */
     public void run() {
         try {
-            if (type == 1) {
+            if (type == 1 && running) {
                 System.out.println("Socket en attente");
                 socketClient = socketServer.accept();
                 writer = new ObjectOutputStream(socketClient.getOutputStream());
@@ -71,7 +73,7 @@ public class CommunicationSocket extends Thread {
                 System.out.println("Connexion établie !!!");
             }
 
-            while (true) {
+            while (running) {
                 Message receveid = (Message)reader.readObject();
                 Controller.getInstance().deliverMessage(receveid);
                 /*byte[] incomingData = new byte[1024];
@@ -87,6 +89,8 @@ public class CommunicationSocket extends Thread {
                 Controller.getInstance().deliverMessage(message);*/
             }
 
+        } catch (SocketException e) {
+            System.out.println("Socket Fermée.");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -118,6 +122,7 @@ public class CommunicationSocket extends Thread {
 
     public void closeSocket() {
         try {
+            running = false;
             if (type == 1) {
                 socketServer.close();
                 socketClient.close();
