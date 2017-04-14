@@ -26,6 +26,8 @@ public class Message extends GuiElement {
 
     JTextArea discussion;
 
+    Message message;
+
     public Message(User user) {
         super();
         this.dest = user;
@@ -43,6 +45,7 @@ public class Message extends GuiElement {
     @Override
     public void initComponents() {
         try {
+            message = this;
             this.setTitle(dest.getPseudo() + " - Discussion");
             this.setLayout(new BorderLayout());
             this.setPreferredSize(new Dimension(500, 300));
@@ -84,6 +87,20 @@ public class Message extends GuiElement {
 
             //JToolBar toolBar = new JToolBar();
             JButton sendFiles = new JButton("Files");
+            sendFiles.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+                    int result = fileChooser.showOpenDialog(message);
+                    if (result == JFileChooser.APPROVE_OPTION) {
+                        File selectedFile = fileChooser.getSelectedFile();
+                        System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+                        // send file
+                        Controller.getInstance().sendFileToUser(selectedFile, dest.getPseudo());
+                    }
+                }
+            });
             //toolBar.add(sendFiles);
 
             JPanel panel_top_right = new JPanel();

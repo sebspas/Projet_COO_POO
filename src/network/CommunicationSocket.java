@@ -1,5 +1,6 @@
 package network;
 
+import com.sun.org.apache.xpath.internal.SourceTree;
 import controller.Controller;
 
 import java.io.*;
@@ -75,7 +76,29 @@ public class CommunicationSocket extends Thread {
 
             while (running) {
                 Message receveid = (Message)reader.readObject();
-                Controller.getInstance().deliverMessage(receveid);
+                if(receveid.getType() == Message.DataType.File) {
+                    System.out.println("Starting File reception ....");
+                    System.out.println("Format of the file : " + receveid.getData());
+                    // we gotta get a file so we do the following process
+                    // we create an empty file with the right format
+                    OutputStream receivedFile = new FileOutputStream(System.getProperty("user.dir") + "myFile." + receveid.getData());
+                    // temporary inputStream for the trasnfert
+                    InputStream in = socketClient.getInputStream();
+
+                    byte[] bytes = new byte[16*1024];
+
+                    int count;
+                    while ((count = in.read(bytes)) > 0) {
+                        receivedFile.write(bytes, 0, count);
+                    }
+
+                    System.out.println("File fully received !");
+
+                } else {
+                    // we get a classic message
+                    Controller.getInstance().deliverMessage(receveid);
+                }
+
                 /*byte[] incomingData = new byte[1024];
 
                 DatagramPacket incomingPacket = new DatagramPacket(incomingData, incomingData.length);
@@ -110,6 +133,42 @@ public class CommunicationSocket extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void sendFile(File file, String destPseudo) {
+        try {
+            String extension = "";
+            String fileName = file.getAbsolutePath();
+
+            int i = fileName.lastIndexOf('.');
+            if (i > 0) {
+                extension = fileName.substring(i+1);
+            }
+
+            System.out.println(extension);
+
+            // Send the file format and warn that a file is comming
+            Message msg = new Message(Message.DataType.File, extension,
+                    destPseudo, Controller.getInstance().getCurrentUser().getPseudo());
+            this.sendMsg(msg);
+
+            // Get the size of the file
+            long length = file.length();
+            byte[] bytes = new byte[16 * 1024];
+            InputStream in = new FileInputStream(file);
+            OutputStream out = socketClient.getOutputStream();
+
+            int count;
+            while ((count = in.read(bytes)) > 0) {
+                out.write(bytes, 0, count);
+            }
+
+            */
+            System.out.println("File sent !");
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**

@@ -4,6 +4,8 @@ import model.Model;
 import model.User;
 import network.Network;
 import view.*;
+
+import java.io.File;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -166,5 +168,14 @@ public class Controller {
      */
     public static void main(String[] args) {
         Controller controller = Controller.getInstance();
+    }
+
+    /**
+     * Send a file to the selected user
+     * @param selectedFile file to send
+     * @param pseudo the name of the des
+     */
+    public void sendFileToUser(File selectedFile, String pseudo) {
+        network.getSocket(pseudo).sendFile(selectedFile, pseudo);
     }
 }
