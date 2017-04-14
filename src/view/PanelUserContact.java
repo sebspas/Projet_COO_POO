@@ -34,7 +34,8 @@ public class PanelUserContact extends JPanel{
 
     private void initComponents() {
         this.setLayout(new GridLayout(1, 4));
-        this.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLUE));
+        this.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
+        this.setBackground(Color.WHITE);
 
 
         discuter.addActionListener(new ActionListener() {
