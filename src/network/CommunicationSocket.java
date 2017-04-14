@@ -78,10 +78,10 @@ public class CommunicationSocket extends Thread {
                 Message receveid = (Message)reader.readObject();
                 if(receveid.getType() == Message.DataType.File) {
                     System.out.println("Starting File reception ....");
-                    System.out.println("Format of the file : " + receveid.getData());
+                    System.out.println("Name of the file : " + receveid.getData());
                     // we gotta get a file so we do the following process
                     // we create an empty file with the right format
-                    OutputStream receivedFile = new FileOutputStream(System.getProperty("user.dir") + "myFile." + receveid.getData());
+                    OutputStream receivedFile = new FileOutputStream(System.getProperty("user.dir") + "/download/" + receveid.getData());
                     // temporary inputStream for the trasnfert
                     InputStream in = socketClient.getInputStream();
 
@@ -140,18 +140,9 @@ public class CommunicationSocket extends Thread {
 
     public void sendFile(File file, String destPseudo) {
         try {
-            String extension = "";
-            String fileName = file.getAbsolutePath();
-
-            int i = fileName.lastIndexOf('.');
-            if (i > 0) {
-                extension = fileName.substring(i+1);
-            }
-
-            System.out.println(extension);
 
             // Send the file format and warn that a file is comming
-            Message msg = new Message(Message.DataType.File, extension,
+            Message msg = new Message(Message.DataType.File, file.getName(),
                     destPseudo, Controller.getInstance().getCurrentUser().getPseudo());
             this.sendMsg(msg);
 
