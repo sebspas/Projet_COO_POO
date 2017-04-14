@@ -128,8 +128,8 @@ public class Network extends Thread {
                     DatagramPacket packet = new DatagramPacket(data, data.length, controlMessage1.getUserAdresse(), listenNumber);
                     socketSender.send(packet);
 
-                    // on crée une Communication socket pour cet user
-                    CommunicationSocket newComSock = new CommunicationSocket(controlMessage1.getUserAdresse(), newPortForReceive);
+                    // on crée une Communication socket pour cet user, en attente d'une connection (type 1)
+                    CommunicationSocket newComSock = new CommunicationSocket(controlMessage1.getUserAdresse(), newPortForReceive, 1);
                     // on supprime l'ancienne socket si il y a lieu
                     UserToSocket.remove(controlMessage1.getUserName());
                     UserToSocket.put(controlMessage1.getUserName(), newComSock);
@@ -142,19 +142,19 @@ public class Network extends Thread {
                     if (UserToSocket.containsKey(controlMessage1.getUserName())) {
                         // si l'utilisateur à déja une socket associé
                         // on update le port de destination pour cette communication
-                        UserToSocket.get(controlMessage1.getUserName()).setPortSocketDest(controlMessage1.getPort());
+                        //UserToSocket.get(controlMessage1.getUserName()).setPortSocketDest(controlMessage1.getPort());
                     } else {
                         // si l'utilisateur n'a pas de socket associé
                         int newPortForReceive = listenNumber + cptSockect;
                         cptSockect++;
                         // on crée une socket
-                        CommunicationSocket newComSock = new CommunicationSocket(controlMessage1.getUserAdresse(), newPortForReceive);
+                        CommunicationSocket newComSock = new CommunicationSocket(controlMessage1.getUserAdresse(), controlMessage1.getPort(), 2);
                         // on supprime l'ancienne socket si il y a lieu
                         UserToSocket.remove(controlMessage1.getUserName());
                         UserToSocket.put(controlMessage1.getUserName(), newComSock);
 
                         // on update le port de dest pour cette socket
-                        newComSock.setPortSocketDest(controlMessage1.getPort());
+                        //newComSock.setPortSocketDest(controlMessage1.getPort());
 
                         // on envoie les informatiosn de la nouvelle socket
                         ControlMessage controlMessageSocket = new ControlMessage(

@@ -3,10 +3,8 @@ package network;
 import controller.Controller;
 
 import java.io.*;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
+import java.lang.reflect.Executable;
+import java.net.*;
 import java.util.ArrayList;
 
 /**
@@ -15,7 +13,13 @@ import java.util.ArrayList;
  */
 public class CommunicationSocket extends Thread {
     // The socket used to send with and receive on
-    private DatagramSocket socket;
+    //private DatagramSocket socket;
+    private ServerSocket socketServer;
+    private Socket socketClient;
+
+    private ObjectOutputStream writer;
+    private ObjectInputStream reader;
+
     // just a save of the port where the socket is
     private int portSocketLocal;
     // the port to send at
@@ -23,17 +27,30 @@ public class CommunicationSocket extends Thread {
     // the ip of the dest
     private InetAddress destip;
 
+    private int type = 0;
+
     /**
      * Basic constructor, just create the socket
      * @param destip the ip adress of the dest
      * @param port the port where to create the socket
+     * @param type the type of socket : 1 => waiting accept (serverSocket), 2=> client connect(socket)
      */
-    public CommunicationSocket(InetAddress destip, int port) {
+    public CommunicationSocket(InetAddress destip, int port, int type) {
         try {
-            this.portSocketLocal = port;
+            this.type =  type;
             this.destip = destip;
-            this.socket = new DatagramSocket(port);
-        } catch (SocketException e) {
+
+            if (this.type == 1) {
+                this.socketServer = new ServerSocket(port);
+                this.portSocketLocal = port;
+            } else {
+                this.socketClient = new Socket(destip, port);
+                reader = new ObjectInputStream(socketClient.getInputStream());
+                writer = new ObjectOutputStream(socketClient.getOutputStream());
+                this.portSocketDest = port;
+            }
+            //this.socket = new DatagramSocket(port);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.println("Socket crée sur le port : " + port);
@@ -44,22 +61,33 @@ public class CommunicationSocket extends Thread {
      * The run() method, wo is listening and getting the incoming message
      */
     public void run() {
-        while (true) {
-            try {
-                byte[] incomingData = new byte[1024];
+        try {
+            if (type == 1) {
+                System.out.println("Socket en attente");
+                socketClient = socketServer.accept();
+                reader = new ObjectInputStream(socketClient.getInputStream());
+                writer = new ObjectOutputStream(socketClient.getOutputStream());
+                System.out.println("Connexion établie !!!");
+            }
+
+            while (true) {
+                Message receveid = (Message)reader.readObject();
+                Controller.getInstance().deliverMessage(receveid);
+                /*byte[] incomingData = new byte[1024];
 
                 DatagramPacket incomingPacket = new DatagramPacket(incomingData, incomingData.length);
                 // on attend un message
-                socket.receive(incomingPacket);
+                //socket.receive(incomingPacket);
                 byte[] dataReceive = incomingPacket.getData();
 
                 // on reconvertit en ControlMessage
                 Message message = networkUtils.convertDataToMessage(dataReceive);
                 //System.out.println("message reçue :" + message);
-                Controller.getInstance().deliverMessage(message);
-            } catch (Exception e) {
-                e.printStackTrace();
+                Controller.getInstance().deliverMessage(message);*/
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -68,10 +96,11 @@ public class CommunicationSocket extends Thread {
      * @param msg the msg to send
      */
     public void sendMsg(Message msg) {
-        byte[] data = networkUtils.convertObjToData(msg);
-        DatagramPacket packet = new DatagramPacket(data, data.length, destip, portSocketDest);
+        //byte[] data = networkUtils.convertObjToData(msg);
+        //DatagramPacket packet = new DatagramPacket(data, data.length, destip, portSocketDest);
         try {
-            socket.send(packet);
+            //socket.send(packet);
+            writer.writeObject(msg);
             System.out.println("Message envoyé !");
         } catch (IOException e) {
             e.printStackTrace();
