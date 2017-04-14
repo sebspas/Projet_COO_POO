@@ -92,6 +92,9 @@ public class CommunicationSocket extends Thread {
                         receivedFile.write(bytes, 0, count);
                     }
 
+                    receivedFile.close();
+                    in.close();
+
                     System.out.println("File fully received !");
 
                 } else {
@@ -163,7 +166,9 @@ public class CommunicationSocket extends Thread {
                 out.write(bytes, 0, count);
             }
 
-            */
+            out.close();
+            in.close();
+
             System.out.println("File sent !");
         }catch (Exception e) {
             e.printStackTrace();
