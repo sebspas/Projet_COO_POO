@@ -80,6 +80,11 @@ public class CommunicationSocket extends Thread {
                     System.out.println("Starting File reception ....");
                     System.out.println("Name of the file : " + receveid.getData());
                     Controller.getInstance().deliverText(receveid.getSrcPseudo(), "Starting file reception : " + receveid.getData(), "System");
+                    // we wait for an other message with the size of the file
+                    Message received2 = (Message)reader.readObject();
+
+                    int length = Integer.parseInt(received2.getData());
+                    System.out.println("Length to received : " + length);
                     // we gotta get a file so we do the following process
                     // we create an empty file with the right format
                     OutputStream receivedFile = new FileOutputStream(System.getProperty("user.dir") + "/" + receveid.getData());
@@ -88,9 +93,10 @@ public class CommunicationSocket extends Thread {
 
                     byte[] bytes = new byte[16*1024];
 
-                    int count;
-                    while ((count = in.read(bytes)) > 0) {
+                    int count = 0;
+                    while (count < length && (count = in.read(bytes)) > 0) {
                         receivedFile.write(bytes, 0, count);
+                        count += count;
                     }
 
                     receivedFile.close();
@@ -147,6 +153,10 @@ public class CommunicationSocket extends Thread {
             Message msg = new Message(Message.DataType.File, file.getName(),
                     destPseudo, Controller.getInstance().getCurrentUser().getPseudo());
             this.sendMsg(msg);
+            // send the file size
+            Message msg2 = new Message(Message.DataType.File, file.length() + "",
+                    destPseudo, Controller.getInstance().getCurrentUser().getPseudo());
+            this.sendMsg(msg2);
 
             // Get the size of the file
             long length = file.length();
@@ -158,7 +168,7 @@ public class CommunicationSocket extends Thread {
             while ((count = in.read(bytes)) > 0) {
                 out.write(bytes, 0, count);
             }
-            bytes = new byte[];
+
             out.write(bytes);
 
             in.close();
