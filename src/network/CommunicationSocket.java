@@ -97,7 +97,7 @@ public class CommunicationSocket extends Thread {
                     while (cptSize < length && (count = in.read(bytes)) > 0) {
                         receivedFile.write(bytes, 0, count);
                         cptSize += count;
-                        System.out.println(cptSize);
+                        //System.out.println(cptSize);
                     }
                     //in.reset();
                     receivedFile.close();
@@ -159,8 +159,6 @@ public class CommunicationSocket extends Thread {
                     destPseudo, Controller.getInstance().getCurrentUser().getPseudo());
             this.sendMsg(msg2);
 
-            // Get the size of the file
-            long length = file.length();
             byte[] bytes = new byte[16 * 1024];
             InputStream in = new FileInputStream(file);
             OutputStream out = socketClient.getOutputStream();
@@ -169,6 +167,7 @@ public class CommunicationSocket extends Thread {
             while ((count = in.read(bytes)) > 0) {
                 out.write(bytes, 0, count);
             }
+
             out.flush();
             in.close();
             Controller.getInstance().deliverText(destPseudo, "File sent !", "System");
