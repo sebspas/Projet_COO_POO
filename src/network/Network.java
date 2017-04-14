@@ -159,7 +159,7 @@ public class Network extends Thread {
                         // on envoie les informatiosn de la nouvelle socket
                         ControlMessage controlMessageSocket = new ControlMessage(
                                 Controller.getInstance().getCurrentUser().getPseudo(),
-                                InetAddress.getLocalHost(),
+                                networkUtils.getLocalHostLANAddress(),
                                 newPortForReceive,
                                 "socket_created");
 
