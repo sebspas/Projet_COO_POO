@@ -33,20 +33,21 @@ public class Contacts extends GuiElement {
             this.setContentPane(backgroundPane);
 
             panel = new JPanel();
-            GridLayout layout = new GridLayout(20, 1);
+            //GridLayout layout = new GridLayout(20, 1);
+            BoxLayout layout = new BoxLayout(panel, BoxLayout.Y_AXIS);
             panel.setLayout(layout);
             panel.setBorder(new EmptyBorder(20, 20, 20, 20));
             panel.setOpaque(false);
-            layout.setVgap(10);
+            //layout.setVgap(10);
 
 
             // // USER PANEL
             User user = Controller.getInstance().getModel().getCurrentUser();
 
             JPanel panelHeader = new JPanel();
-            panelHeader.setLayout(new BoxLayout(panelHeader, BoxLayout.LINE_AXIS));
+            panelHeader.setLayout(new BoxLayout(panelHeader, BoxLayout.Y_AXIS));
             panelHeader.setBorder(BorderFactory.createTitledBorder("Welcome " + user.getPseudo() + " !"));
-            //panelHeader.setPreferredSize(new Dimension(380, 60));
+            panelHeader.setPreferredSize(new Dimension(380, 100));
             panelHeader.setBackground(Color.WHITE);
             panelHeader.setOpaque(false);
 
@@ -119,6 +120,7 @@ public class Contacts extends GuiElement {
 
                     panelOnline.remove(panelUser1);
                     panelUser1.setBackground(Color.LIGHT_GRAY);
+                    panelUser1.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.WHITE));
                     panelOffline.add(panelUser1);
 
                     panel.updateUI();
@@ -126,7 +128,7 @@ public class Contacts extends GuiElement {
             });
 
             this.add(panel);
-            this.setResizable(false);
+            this.setResizable(true);
             this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
             this.addWindowListener(new WindowListener() {
                 @Override
@@ -186,6 +188,20 @@ public class Contacts extends GuiElement {
         //panel.updateUI();
         panel.revalidate();
     }
+
+    /*
+    public void setUserOffline(User user) {
+
+        panelOnline.remove(panelUser1);
+        panelUser1.setBackground(Color.LIGHT_GRAY);
+        panelUser1.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.WHITE));
+        panelOffline.add(panelUser1);
+
+        panel.updateUI();
+
+    }
+    */
+
 
     @Override
     public void notif(String msg) {

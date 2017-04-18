@@ -34,7 +34,6 @@ public class Gui {
         userToPanel = new HashMap<>();
         usertToChat = new HashMap<>();
 
-
     }
 
     public void launch() {
