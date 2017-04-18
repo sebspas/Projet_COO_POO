@@ -8,7 +8,7 @@ import java.util.Scanner;
 /**
  * Created by tahel on 18/04/17.
  */
-public class GuiText extends Gui {
+public class GuiText implements Gui {
 
     public GuiText() {
 

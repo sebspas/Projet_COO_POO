@@ -7,7 +7,7 @@ import java.util.HashMap;
 /**
  * Created by tahel on 18/04/17.
  */
-public class GuiGraphique extends Gui {
+public class GuiGraphique implements Gui {
 
     // First GUI we need to keep it as data member to try to connect
     private GuiElement login;
