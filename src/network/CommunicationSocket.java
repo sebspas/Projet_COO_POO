@@ -76,6 +76,7 @@ public class CommunicationSocket extends Thread {
 
             while (running) {
                 Message receveid = (Message)reader.readObject();
+
                 if(receveid.getType() == Message.DataType.File) {
                     System.out.println("Starting File reception ....");
                     System.out.println("Name of the file : " + receveid.getData());
@@ -108,23 +109,11 @@ public class CommunicationSocket extends Thread {
                     // we get a classic message
                     Controller.getInstance().deliverMessage(receveid);
                 }
-
-                /*byte[] incomingData = new byte[1024];
-
-                DatagramPacket incomingPacket = new DatagramPacket(incomingData, incomingData.length);
-                // on attend un message
-                //socket.receive(incomingPacket);
-                byte[] dataReceive = incomingPacket.getData();
-
-                // on reconvertit en ControlMessage
-                Message message = networkUtils.convertDataToMessage(dataReceive);
-                //System.out.println("message reçue :" + message);
-                Controller.getInstance().deliverMessage(message);*/
             }
 
-        } /*catch (EOFException e) {
+        } catch (EOFException e) {
           // it's nothing
-        } */catch (SocketException e) {
+        } catch (SocketException e) {
             System.out.println("Socket Fermée.");
         } catch (Exception e) {
             e.printStackTrace();
