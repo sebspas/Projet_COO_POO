@@ -151,7 +151,11 @@ public class Controller {
      * @param msg the message to send
      */
     public void sendToUser(User dest, network.Message msg) {
-        network.getSocket(dest.getPseudo()).sendMsg(msg);
+        if (network.getSocket(dest.getPseudo()) != null) {
+            network.getSocket(dest.getPseudo()).sendMsg(msg);
+        } else {
+            deliverText(dest.getPseudo(), "L'utilisateur n'est pas connecté !", "System");
+        }
     }
 
     /**

@@ -43,7 +43,7 @@ public class Login extends GuiElement {
             panel.setPreferredSize(new Dimension(300, 200));
 
 
-            JTextField username = new JTextField();
+            final JTextField username = new JTextField();
             username.setPreferredSize(new Dimension(270, 15));
             username.setColumns(20);
             Font bigFont = username.getFont().deriveFont(Font.PLAIN, 15f);
