@@ -25,7 +25,7 @@ public class Contacts extends GuiElement {
             this.setTitle("Contacts - ChatWithBoo");
             this.setPreferredSize(new Dimension(400, 800));
             BackgroundPane backgroundPane = new BackgroundPane();
-            backgroundPane.setBackground(ImageIO.read(new File("images/bg_contacts.jpg")));
+            backgroundPane.setBackground(ImageIO.read(this.getClass().getResourceAsStream("/bg_contacts.jpg")));
             this.setContentPane(backgroundPane);
 
             panel = new JPanel();

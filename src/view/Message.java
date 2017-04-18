@@ -52,7 +52,7 @@ public class Message extends GuiElement {
             this.setPreferredSize(new Dimension(700, 450));
 
             BackgroundPane backgroundPane = new BackgroundPane();
-            backgroundPane.setBackground(ImageIO.read(new File("images/bg_message.gif")));
+            backgroundPane.setBackground(ImageIO.read(this.getClass().getResourceAsStream(("/bg_message.gif"))));
             this.setContentPane(backgroundPane);
 
             JPanel panel = new JPanel();

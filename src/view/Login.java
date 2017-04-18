@@ -33,7 +33,7 @@ public class Login extends GuiElement {
 
 
             BackgroundPane backgroundPane = new BackgroundPane();
-            backgroundPane.setBackground(ImageIO.read(new File("images/bg_login.png")));
+            backgroundPane.setBackground(ImageIO.read(this.getClass().getResourceAsStream("/bg_login.png")));
             this.setContentPane(backgroundPane);
 
             JPanel panel = new JPanel();
