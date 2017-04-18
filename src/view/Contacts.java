@@ -16,6 +16,8 @@ import java.io.File;
 public class Contacts extends GuiElement {
 
     private JPanel panel;
+    private JPanel panelOnline;
+    private JPanel panelOffline;
 
     public Contacts(){
         super();
@@ -37,69 +39,91 @@ public class Contacts extends GuiElement {
             panel.setOpaque(false);
             layout.setVgap(10);
 
-            /*
-            // USER LOCAL
-            User user = Controller.getInstance().getModel().getCurrentUser();
-            Message msg = (Message) GUIFactory.createGui(GUIFactory.TypeWindows.MESSAGE, user);
-
-            Controller.getInstance().addUserToChat(user.getPseudo(), msg);
-
-            PanelUserContact panelUser = new PanelUserContact(user, msg);
-            Controller.getInstance().addUserToPanel(user.getPseudo(), panelUser);
-            panel.add(panelUser);
-            */
 
             // // USER PANEL
-            JPanel panelUser = new JPanel();
+            User user = Controller.getInstance().getModel().getCurrentUser();
+
+            JPanel panelHeader = new JPanel();
+            panelHeader.setLayout(new BoxLayout(panelHeader, BoxLayout.LINE_AXIS));
+            panelHeader.setBorder(BorderFactory.createTitledBorder("Welcome " + user.getPseudo() + " !"));
+            //panelHeader.setPreferredSize(new Dimension(380, 60));
+            panelHeader.setBackground(Color.WHITE);
+            panelHeader.setOpaque(false);
+
+            //panelUser1.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            /*
             panelUser.setLayout(new GridLayout(1, 3));
             panelUser.setBorder(new EmptyBorder(5, 10, 5, 10));
-            panelUser.setPreferredSize(new Dimension(400, 70));
+            panelUser.setPreferredSize(new Dimension(400, 20));
+            panelUser.setOpaque(false);
+            */
+
+            JPanel panelUser = new JPanel();
+            panelUser.setLayout(new GridLayout(1, 3));
             panelUser.setOpaque(false);
 
-            User user = Controller.getInstance().getModel().getCurrentUser();
             JLabel photo = new JLabel(user.getIcon());
             JLabel name = new JLabel(user.getPseudo());
             name.setFont(new Font("Arial", Font.BOLD, 20));
             //JLabel status = new JLabel(user.getStatus().toString());
             //status.setFont(new Font("Arial", Font.PLAIN, 20));
-            JButton disconnect = new JButton("Déconnexion");
+            JButton disconnect = new JButton("Log out");
+            //disconnect.setPreferredSize(new Dimension(20,10));
 
-            disconnect.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    panelUser.setOpaque(true);
-                    panelUser.setBackground(Color.RED);
-                    //tatus.setText("Offline");
-                }
-            });
 
             panelUser.add(photo);
             panelUser.add(name);
             //panelUser.add(status);
             panelUser.add(disconnect);
+
+            panelHeader.add(panelUser);
+            panel.add(panelHeader);
             // //
+
+            // USER LOCAL
+            //User user = Controller.getInstance().getModel().getCurrentUser();
+            Message msg = (Message) GUIFactory.createGui(GUIFactory.TypeWindows.MESSAGE, user);
+
+            Controller.getInstance().addUserToChat(user.getPseudo(), msg);
+
+            PanelUserContact panelUser1 = new PanelUserContact(user, msg);
+            Controller.getInstance().addUserToPanel(user.getPseudo(), panelUser1);
+            //panel.add(panelUser1);
 
             // // ONLINE
-            JPanel panelOnline = new JPanel();
-            JLabel online = new JLabel("ONLINE");
-            online.setFont(new Font("Arial", Font.BOLD, 14));
-            panelOnline.setBorder(new EmptyBorder(0, 0, 0, 0));
-            panelOnline.setPreferredSize(new Dimension(100, 20));
+            panelOnline = new JPanel();
+            panelOnline.setLayout(new BoxLayout(panelOnline, BoxLayout.Y_AXIS));
+            panelOnline.setBorder(BorderFactory.createTitledBorder("Online"));
             panelOnline.setBackground(Color.WHITE);
-            panelOnline.add(online);
+            panelOnline.setOpaque(false);
+
+            panelUser1.setAlignmentX(Component.CENTER_ALIGNMENT);
+            panelOnline.add(panelUser1);
 
             // // OFFLINE
-            JPanel panelOffline = new JPanel();
-            JLabel offline = new JLabel("OFFLINE");
-            offline.setFont(new Font("Arial", Font.BOLD, 14));
-            panelOffline.setBorder(new EmptyBorder(0, 0, 0, 0));
-            panelOffline.setPreferredSize(new Dimension(100, 20));
-            panelOffline.add(offline);
-            // //
+            panelOffline = new JPanel();
+            panelOffline.setLayout(new BoxLayout(panelOffline, BoxLayout.Y_AXIS));
+            panelOffline.setBorder(BorderFactory.createTitledBorder("Offline"));
+            panelOffline.setOpaque(false);
 
-            panel.add(panelUser);
             panel.add(panelOnline);
             panel.add(panelOffline);
+
+            // disconnect button action
+            disconnect.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    //panelUser.setOpaque(true);
+                    //panelUser.setBackground(Color.RED);
+
+                    panelOnline.remove(panelUser1);
+                    panelUser1.setBackground(Color.LIGHT_GRAY);
+                    panelOffline.add(panelUser1);
+
+                    panel.updateUI();
+                }
+            });
 
             this.add(panel);
             this.setResizable(false);
@@ -157,7 +181,9 @@ public class Contacts extends GuiElement {
         PanelUserContact panelUser = new PanelUserContact(user, msg);
         Controller.getInstance().addUserToPanel(user.getPseudo(), panelUser);
 
-        panel.add(panelUser);
+        panelUser.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelOnline.add(panelUser);
+        //panel.updateUI();
         panel.revalidate();
     }
 
