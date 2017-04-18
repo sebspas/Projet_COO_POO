@@ -13,6 +13,14 @@ public class Model {
     // Current user of the app
     private User currentUser;
 
+    /**
+     * Getter current_state of the app
+     * @return the state
+     */
+    public State getCurrent_state() {
+        return current_state;
+    }
+
     // All the state that the app can enter in
     public enum State {
         Disconnected,
