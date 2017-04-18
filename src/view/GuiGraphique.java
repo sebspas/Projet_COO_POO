@@ -30,7 +30,29 @@ public class GuiGraphique implements Gui {
     }
 
     public void setUserStatus(String name, String status) {
-            userToPanel.get(name).setStatus(status);
+        userToPanel.get(name).setStatus(status);
+
+        switch(status){
+            case "Online":
+                this.setUserOnline(name);
+                break;
+            case "Offline":
+                this.setUserOffline(name);
+                break;
+            default:
+                System.out.println("user status inconnu");
+                break;
+        }
+    }
+
+    public void setUserOffline(String name){
+        PanelUserContact panelUser = userToPanel.get(name);
+        mainWindows.setUserOffline(panelUser);
+    }
+
+    public void setUserOnline(String name){
+        PanelUserContact panelUser = userToPanel.get(name);
+        mainWindows.setUserOnline(panelUser);
     }
 
     public void addUserToChat(String name, Message msg) {

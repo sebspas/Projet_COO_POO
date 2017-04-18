@@ -82,6 +82,7 @@ public class Contacts extends GuiElement {
             panel.add(panelHeader);
             // //
 
+            /*
             // USER LOCAL
             //User user = Controller.getInstance().getModel().getCurrentUser();
             Message msg = (Message) GUIFactory.createGui(GUIFactory.TypeWindows.MESSAGE, user);
@@ -91,6 +92,7 @@ public class Contacts extends GuiElement {
             PanelUserContact panelUser1 = new PanelUserContact(user, msg);
             Controller.getInstance().addUserToPanel(user.getPseudo(), panelUser1);
             //panel.add(panelUser1);
+            */
 
             // // ONLINE
             panelOnline = new JPanel();
@@ -99,8 +101,8 @@ public class Contacts extends GuiElement {
             panelOnline.setBackground(Color.WHITE);
             panelOnline.setOpaque(false);
 
-            panelUser1.setAlignmentX(Component.CENTER_ALIGNMENT);
-            panelOnline.add(panelUser1);
+            //panelUser1.setAlignmentX(Component.CENTER_ALIGNMENT);
+            //panelOnline.add(panelUser1);
 
             // // OFFLINE
             panelOffline = new JPanel();
@@ -118,10 +120,12 @@ public class Contacts extends GuiElement {
                     //panelUser.setOpaque(true);
                     //panelUser.setBackground(Color.RED);
 
+                    /*
                     panelOnline.remove(panelUser1);
                     panelUser1.setBackground(Color.LIGHT_GRAY);
                     panelUser1.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.WHITE));
                     panelOffline.add(panelUser1);
+                    */
 
                     panel.updateUI();
                 }
@@ -189,18 +193,26 @@ public class Contacts extends GuiElement {
         panel.revalidate();
     }
 
-    /*
-    public void setUserOffline(User user) {
+    public void setUserOffline(PanelUserContact panelUser) {
 
-        panelOnline.remove(panelUser1);
-        panelUser1.setBackground(Color.LIGHT_GRAY);
-        panelUser1.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.WHITE));
-        panelOffline.add(panelUser1);
+        panelOnline.remove(panelUser);
+        panelUser.setBackground(Color.LIGHT_GRAY);
+        panelUser.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.WHITE));
+        panelOffline.add(panelUser);
 
         panel.updateUI();
-
     }
-    */
+
+
+    public void setUserOnline(PanelUserContact panelUser) {
+
+        panelOffline.remove(panelUser);
+        panelUser.setBackground(Color.WHITE);
+        panelUser.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
+        panelOnline.add(panelUser);
+
+        panel.updateUI();
+    }
 
 
     @Override
