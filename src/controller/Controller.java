@@ -22,8 +22,7 @@ public class Controller {
     private Network network;
 
     // FLAG for the parrot behavior
-    private boolean isParrot = false;
-
+    private boolean isParrot = true;
 
     private Gui gui;
 
@@ -36,7 +35,12 @@ public class Controller {
      */
     private Controller() {
         model = new Model();
-        gui = new GuiGraphique();
+
+        if (isParrot) {
+            gui = new GuiText();
+        } else {
+            gui = new GuiGraphique();
+        }
     }
 
     /**
