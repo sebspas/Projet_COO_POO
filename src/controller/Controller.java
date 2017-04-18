@@ -35,7 +35,12 @@ public class Controller {
      */
     private Controller() {
         model = new Model();
-        gui = new GuiGraphique();
+
+        if (isParrot) {
+            gui = new GuiText();
+        } else {
+            gui = new GuiGraphique();
+        }
     }
 
     /**
