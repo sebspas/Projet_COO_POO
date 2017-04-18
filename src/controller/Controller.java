@@ -3,9 +3,7 @@ package controller;
 import model.Model;
 import model.User;
 import network.Network;
-import view.Gui;
-import view.Message;
-import view.PanelUserContact;
+import view.*;
 
 import java.io.File;
 import java.net.Inet4Address;
@@ -25,7 +23,6 @@ public class Controller {
 
     // FLAG for the parrot behavior
     private boolean isParrot = false;
-    //private boolean isParrot = true;
 
     private Gui gui;
 
@@ -38,8 +35,7 @@ public class Controller {
      */
     private Controller() {
         model = new Model();
-        //gui = new Gui(Gui.type_gui.TEXT);
-        gui = new Gui(Gui.type_gui.GRAPHIQUE);
+        gui = new GuiGraphique();
     }
 
     /**
