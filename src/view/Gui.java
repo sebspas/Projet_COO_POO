@@ -1,23 +1,15 @@
 package view;
 
+import controller.Controller;
 import model.User;
 
 import java.util.HashMap;
+import java.util.Scanner;
 
 /**
  * Created by tahel on 18/04/17.
  */
 public class Gui {
-
-    public void createMainWindow() {
-        mainWindows = (Contacts) GUIFactory.createGui(GUIFactory.TypeWindows.CONTACTS);
-        active = mainWindows;
-        login.close();
-    }
-
-    public void notif(String s) {
-        active.notif(s);
-    }
 
     public enum type_gui {
         TEXT,
@@ -42,36 +34,59 @@ public class Gui {
         userToPanel = new HashMap<>();
         usertToChat = new HashMap<>();
 
-        if (type_gui == Gui.type_gui.TEXT) {
+
+    }
+
+    public void launch() {
+        if (typeGui == Gui.type_gui.TEXT) {
             System.out.println("Entrer le pseudo : ");
-            //TODO ARRIVER DU PSEUDO
+            Scanner scanner = new Scanner(System.in);
+            String pseudo = scanner.next();
+            Controller.getInstance().buttonLoginClicked(pseudo);
         } else {
             login = GUIFactory.createGui(GUIFactory.TypeWindows.LOGIN);
             active = login;
         }
-
     }
 
     public void setUserStatus(String name, String status) {
-        userToPanel.get(name).setStatus(status);
+        if (typeGui == Gui.type_gui.TEXT) {
+            System.out.println(name + " est maintenant deconnecté " + status);
+        } else {
+            userToPanel.get(name).setStatus(status);
+        }
     }
 
     public void addUserToChat(String name, Message msg) {
-        this.usertToChat.put(name, msg);
+        if (typeGui == Gui.type_gui.TEXT) {
+            System.out.println(name + " viens de se connecter." );
+        } else {
+            this.usertToChat.put(name, msg);
+        }
     }
 
     public void deliverMessage(network.Message msg) {
-
-        usertToChat.get(msg.getSrcPseudo()).addMessage(msg.getData(), msg.getSrcPseudo());
+        if (typeGui == Gui.type_gui.TEXT) {
+            System.out.println("Message de " + msg.getSrcPseudo() + " : " + msg.getData());
+        } else {
+            usertToChat.get(msg.getSrcPseudo()).addMessage(msg.getData(), msg.getSrcPseudo());
+        }
     }
 
     public void deliverText(String dest, String Message, String source) {
-        usertToChat.get(dest).addMessage(Message, source);
+        if (typeGui == Gui.type_gui.TEXT) {
+            System.out.println("Message de " + dest + " : " + Message);
+        } else {
+            usertToChat.get(dest).addMessage(Message, source);
+        }
     }
 
-
     public void addNewUser(User u1) {
-        mainWindows.addNewUser(u1);
+        if (typeGui == Gui.type_gui.TEXT) {
+            System.out.println(u1.getPseudo() + " est maintenant connecté." );
+        } else {
+            mainWindows.addNewUser(u1);
+        }
     }
 
     /**
@@ -80,8 +95,24 @@ public class Gui {
      * @param panel the panel on the contact window
      */
     public void addUserToPanel(String name, PanelUserContact panel) {
-        this.userToPanel.put(name, panel);
+        if (typeGui == Gui.type_gui.TEXT) {
+            // rien
+        } else {
+            this.userToPanel.put(name, panel);
+        }
     }
 
+    public void createMainWindow() {
+        if (typeGui == type_gui.TEXT) {
+            System.out.println("Vous êtes connecté.");
+        } else {
+            mainWindows = (Contacts) GUIFactory.createGui(GUIFactory.TypeWindows.CONTACTS);
+            active = mainWindows;
+            login.close();
+        }
+    }
 
+    public void notif(String s) {
+        active.notif(s);
+    }
 }

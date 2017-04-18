@@ -3,13 +3,14 @@ package controller;
 import model.Model;
 import model.User;
 import network.Network;
-import view.*;
+import view.Gui;
+import view.Message;
+import view.PanelUserContact;
 
 import java.io.File;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.HashMap;
 
 /**
  * Controller of the App, control every interaction between the network
@@ -21,6 +22,9 @@ public class Controller {
     private Model model;
     // Network component, control the network interactions
     private Network network;
+
+    // FLAG for the parrot behavior
+    private boolean isParrot = true;
 
 
     private Gui gui;
@@ -34,7 +38,7 @@ public class Controller {
      */
     private Controller() {
         model = new Model();
-        gui = new Gui(Gui.type_gui.GRAPHIQUE);
+        gui = new Gui(Gui.type_gui.TEXT);
     }
 
     /**
@@ -150,12 +154,32 @@ public class Controller {
         }
     }
 
+    public void sendToUser(String pseudo, network.Message msg) {
+        if (network.getSocket(pseudo) != null) {
+            network.getSocket(pseudo).sendMsg(msg);
+        } else {
+            deliverText(pseudo, "L'utilisateur n'est pas connecté !", "System");
+        }
+    }
+
     /**
      * Print the received message on the good message window
      * @param msg the message to print
      */
     public void deliverMessage(network.Message msg) {
-        gui.deliverMessage(msg);
+        if (isParrot) {
+            gui.deliverMessage(msg);
+
+            network.Message msgBis = new network.Message(msg.getType(), msg.getData(), msg.getSrcPseudo(), msg.getDestPseudo());
+
+            if (msg.getData().equals("disconnect")) {
+                this.disconnect();
+            } else {
+                sendToUser(msg.getSrcPseudo(), msgBis);
+            }
+        } else {
+            gui.deliverMessage(msg);
+        }
     }
 
     public void deliverText(String dest, String Message, String source) {
@@ -172,12 +196,21 @@ public class Controller {
         network.getSocket(pseudo).sendFile(selectedFile, pseudo);
     }
 
+    public void launch(){
+        if (isParrot) {
+            this.buttonLoginClicked("Parrot");
+        } else {
+            gui.launch();
+        }
+    }
+
     /**
      * Main to launch of the program
      * @param args no args for the moment
      */
     public static void main(String[] args) {
         Controller controller = Controller.getInstance();
+        controller.launch();
     }
 
 }
