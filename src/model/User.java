@@ -35,8 +35,7 @@ public class User {
         this.pseudo = pseudo;
         this.ip = ip;
         this.status = Status.Online;
-
-        this.icon = new ImageIcon("images/user.png");
+        this.icon = new ImageIcon(this.getClass().getResource("/user.png"));
     }
 
     /**

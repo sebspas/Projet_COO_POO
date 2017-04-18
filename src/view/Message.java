@@ -12,9 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
-import java.lang.reflect.Executable;
 import java.net.Inet4Address;
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
@@ -24,9 +22,12 @@ public class Message extends GuiElement {
 
     private User dest;
 
-    JTextArea discussion;
+    JEditorPane discussion;
+    JScrollPane scrollDiscussion;
 
     Message message;
+
+    String contentText = "";
 
     public Message(User user) {
         super();
@@ -48,28 +49,34 @@ public class Message extends GuiElement {
             message = this;
             this.setTitle(dest.getPseudo() + " - Discussion");
             this.setLayout(new BorderLayout());
-            this.setPreferredSize(new Dimension(500, 300));
+            this.setPreferredSize(new Dimension(700, 450));
 
             BackgroundPane backgroundPane = new BackgroundPane();
-            backgroundPane.setBackground(ImageIO.read(new File("images/bg_message.gif")));
+            backgroundPane.setBackground(ImageIO.read(this.getClass().getResourceAsStream(("/bg_message.gif"))));
             this.setContentPane(backgroundPane);
 
             JPanel panel = new JPanel();
             panel.setBorder(new EmptyBorder(20, 20, 20, 20));
             panel.setLayout(new BorderLayout());
             panel.setOpaque(false);
-            panel.setPreferredSize(new Dimension(470, 280));
 
             JLabel imageUser = new JLabel(dest.getIcon());
             imageUser.setOpaque(false);
 
-            discussion = new JTextArea();
+            discussion = new JEditorPane();
             discussion.setEditable(false);
-            discussion.setRows(20);
-            discussion.setColumns(30);
+            discussion.setContentType("text/html");
+            //discussion.setRows(20);
+            //discussion.setColumns(30);
 
-            JTextArea sendtext = new JTextArea();
+            scrollDiscussion = new JScrollPane(discussion, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+            scrollDiscussion.setPreferredSize(new Dimension(480, 270));
+
+            final JTextArea sendtext = new JTextArea();
             sendtext.setRows(3);
+
+            JScrollPane scrollSend = new JScrollPane(sendtext);
+            scrollSend.setPreferredSize(new Dimension(new Dimension(540, 100)));
 
             JButton send = new JButton("Send");
             send.addActionListener(new ActionListener() {
@@ -80,7 +87,8 @@ public class Message extends GuiElement {
                             sendtext.getText(),
                             dest.getPseudo(),
                             Controller.getInstance().getCurrentUser().getPseudo()));
-                    discussion.append(Controller.getInstance().getCurrentUser().getPseudo() + " : " + sendtext.getText() + "\n");
+                    contentText += "<font color=\"blue\"> Moi : </font>" + sendtext.getText() + "<br>";
+                    discussion.setText("<html>" + contentText + "</html>");
                     sendtext.setText("");
                 }
             });
@@ -108,7 +116,7 @@ public class Message extends GuiElement {
             panel_top_right.setOpaque(false);
             //panel_top.add(imageUser, BorderLayout.NORTH);
             //panel_top.add(labelDest, BorderLayout.WEST);
-            panel_top_right.add(discussion, BorderLayout.CENTER);
+            panel_top_right.add(scrollDiscussion, BorderLayout.CENTER);
 
 
             JPanel panel_bot = new JPanel();
@@ -116,7 +124,7 @@ public class Message extends GuiElement {
             panel_bot.setOpaque(false);
 
 
-            panel_bot.add(sendtext, BorderLayout.CENTER);
+            panel_bot.add(scrollSend, BorderLayout.CENTER);
             panel_bot.add(sendFiles, BorderLayout.NORTH);
             panel_bot.add(send, BorderLayout.EAST);
 
@@ -206,7 +214,9 @@ public class Message extends GuiElement {
     }
 
     public void addMessage(String data, String source) {
-        discussion.append(source + " : " + data + "\n");
+        contentText += "<font color=\"red\">" + source + " : </font>" + data + "<br>";
+        discussion.setText("<html>" + contentText + "</html>");
         discussion.revalidate();
+        scrollDiscussion.revalidate();
     }
 }

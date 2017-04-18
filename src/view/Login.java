@@ -33,7 +33,7 @@ public class Login extends GuiElement {
 
 
             BackgroundPane backgroundPane = new BackgroundPane();
-            backgroundPane.setBackground(ImageIO.read(new File("images/bg_login.png")));
+            backgroundPane.setBackground(ImageIO.read(this.getClass().getResourceAsStream("/bg_login.png")));
             this.setContentPane(backgroundPane);
 
             JPanel panel = new JPanel();
@@ -43,7 +43,7 @@ public class Login extends GuiElement {
             panel.setPreferredSize(new Dimension(300, 200));
 
 
-            JTextField username = new JTextField();
+            final JTextField username = new JTextField();
             username.setPreferredSize(new Dimension(270, 15));
             username.setColumns(20);
             Font bigFont = username.getFont().deriveFont(Font.PLAIN, 15f);
