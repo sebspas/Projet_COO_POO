@@ -21,14 +21,9 @@ public class Controller {
     private Model model;
     // Network component, control the network interactions
     private Network network;
-    // First GUI we need to keep it as data member to try to connect
-    private GuiElement login;
-    // Main Frame, we need to keep it to have a track of the interaction
-    private Contacts mainWindows;
-    // For a pseudo we keep the panelUserContact to be able to access it (to change status for example)
-    private HashMap<String, PanelUserContact> userToPanel;
-    // For a pseudo we keep the window of message
-    private HashMap<String, Message> usertToChat;
+
+
+    private Gui gui;
 
     /** Instance unique pré-initialisée (singleton) */
     private static Controller INSTANCE = new Controller();
@@ -38,10 +33,8 @@ public class Controller {
      * and create the first window (login)
      */
     private Controller() {
-            model = new Model();
-            userToPanel = new HashMap<>();
-            usertToChat = new HashMap<>();
-            login = GUIFactory.createGui(GUIFactory.TypeWindows.LOGIN);
+        model = new Model();
+        gui = new Gui(Gui.type_gui.GRAPHIQUE);
     }
 
     /**
@@ -60,7 +53,7 @@ public class Controller {
      */
     public void setUserOffLine(String name) {
         model.setUserStatus(name, User.Status.Offline);
-        userToPanel.get(name).setStatus("Offline");
+        gui.setUserStatus(name, User.Status.Offline.toString());
     }
 
     /**
@@ -72,11 +65,10 @@ public class Controller {
     public void buttonLoginClicked(String pseudo) {
         try {
             if (model.connectChat(pseudo, Inet4Address.getLocalHost())) {
-                mainWindows = (Contacts) GUIFactory.createGui(GUIFactory.TypeWindows.CONTACTS);
+                gui.createMainWindow();
                 network = new Network();
-                login.close();
             } else {
-                login.notif("Connection impossible");
+               gui.notif("Connexion Impossible");
             }
         } catch (UnknownHostException e) {
             e.printStackTrace();
@@ -89,7 +81,7 @@ public class Controller {
      * @param msg the message window
      */
     public void addUserToChat(String name, Message msg) {
-        this.usertToChat.put(name, msg);
+        gui.addUserToChat(name, msg);
     }
 
     /**
@@ -98,7 +90,7 @@ public class Controller {
      * @param panel the panel on the contact window
      */
     public void addUserToPanel(String name, PanelUserContact panel) {
-        this.userToPanel.put(name, panel);
+        gui.addUserToPanel(name, panel);
     }
 
 
@@ -128,12 +120,12 @@ public class Controller {
         // two cases if user already exist or not
         if (model.contains(name)) {
             // user already exist, so we update his status
-            userToPanel.get(name).setStatus("Online");
+            gui.setUserStatus(name, User.Status.Online.toString());
         } else {
             // we create a new user
             User u1 = new User(name, ip);
             model.addUser(u1);
-            mainWindows.addNewUser(u1);
+            gui.addNewUser(u1);
         }
     }
 
@@ -163,11 +155,21 @@ public class Controller {
      * @param msg the message to print
      */
     public void deliverMessage(network.Message msg) {
-        usertToChat.get(msg.getSrcPseudo()).addMessage(msg.getData(), msg.getSrcPseudo());
+        gui.deliverMessage(msg);
     }
 
     public void deliverText(String dest, String Message, String source) {
-        usertToChat.get(dest).addMessage(Message, source);
+        gui.deliverText(dest, Message, source);
+    }
+
+
+    /**
+     * Send a file to the selected user
+     * @param selectedFile file to send
+     * @param pseudo the name of the des
+     */
+    public void sendFileToUser(File selectedFile, String pseudo) {
+        network.getSocket(pseudo).sendFile(selectedFile, pseudo);
     }
 
     /**
@@ -178,12 +180,4 @@ public class Controller {
         Controller controller = Controller.getInstance();
     }
 
-    /**
-     * Send a file to the selected user
-     * @param selectedFile file to send
-     * @param pseudo the name of the des
-     */
-    public void sendFileToUser(File selectedFile, String pseudo) {
-        network.getSocket(pseudo).sendFile(selectedFile, pseudo);
-    }
 }

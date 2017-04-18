@@ -72,6 +72,7 @@ public class Network extends Thread {
      */
     public void sendDisconnect() {
         try {
+            //TODO debug hello
             // broadcast a vrai
             socketSender.setBroadcast(true);
             ControlMessage controlMessage = new ControlMessage(Controller.getInstance().getCurrentUser().getPseudo(),
