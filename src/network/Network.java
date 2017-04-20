@@ -7,6 +7,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -30,6 +31,7 @@ public class Network extends Thread {
      */
     public Network() {
         try {
+
             UserToSocket = new HashMap<>();
 
             socketSender = new DatagramSocket();

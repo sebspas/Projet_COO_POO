@@ -67,4 +67,9 @@ public class GuiGraphique implements Gui {
     public void notif(String s) {
         active.notif(s);
     }
+
+    @Override
+    public void deliverImage(String dest, String path) {
+        usertToChat.get(dest).addImage(path);
+    }
 }

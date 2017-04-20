@@ -24,4 +24,6 @@ public interface Gui {
     void createMainWindow();
 
     void notif(String s);
+
+    void deliverImage(String dest, String path);
 }

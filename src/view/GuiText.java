@@ -57,4 +57,10 @@ public class GuiText implements Gui {
     public void notif(String s) {
         System.out.println(s);
     }
+
+    @Override
+    public void deliverImage(String dest, String path) {
+
+    }
+
 }
