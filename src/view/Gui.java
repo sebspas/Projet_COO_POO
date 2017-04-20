@@ -7,6 +7,7 @@ import model.User;
  */
 public interface Gui {
 
+
     void launch();
 
     void setUserStatus(String name, String status);

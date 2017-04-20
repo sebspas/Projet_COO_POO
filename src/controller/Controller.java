@@ -45,6 +45,7 @@ public class Controller {
         }
     }
 
+
     private Gui gui;
 
     /** Instance unique pré-initialisée (singleton) */

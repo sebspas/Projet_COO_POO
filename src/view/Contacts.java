@@ -33,20 +33,21 @@ public class Contacts extends GuiElement {
             this.setContentPane(backgroundPane);
 
             panel = new JPanel();
-            GridLayout layout = new GridLayout(20, 1);
+            //GridLayout layout = new GridLayout(20, 1);
+            BoxLayout layout = new BoxLayout(panel, BoxLayout.Y_AXIS);
             panel.setLayout(layout);
             panel.setBorder(new EmptyBorder(20, 20, 20, 20));
             panel.setOpaque(false);
-            layout.setVgap(10);
+            //layout.setVgap(10);
 
 
             // // USER PANEL
             User user = Controller.getInstance().getModel().getCurrentUser();
 
             JPanel panelHeader = new JPanel();
-            panelHeader.setLayout(new BoxLayout(panelHeader, BoxLayout.LINE_AXIS));
+            panelHeader.setLayout(new BoxLayout(panelHeader, BoxLayout.Y_AXIS));
             panelHeader.setBorder(BorderFactory.createTitledBorder("Welcome " + user.getPseudo() + " !"));
-            //panelHeader.setPreferredSize(new Dimension(380, 60));
+            panelHeader.setPreferredSize(new Dimension(380, 100));
             panelHeader.setBackground(Color.WHITE);
             panelHeader.setOpaque(false);
 
@@ -81,6 +82,7 @@ public class Contacts extends GuiElement {
             panel.add(panelHeader);
             // //
 
+            /*
             // USER LOCAL
             //User user = Controller.getInstance().getModel().getCurrentUser();
             Message msg = (Message) GUIFactory.createGui(GUIFactory.TypeWindows.MESSAGE, user);
@@ -90,6 +92,7 @@ public class Contacts extends GuiElement {
             PanelUserContact panelUser1 = new PanelUserContact(user, msg);
             Controller.getInstance().addUserToPanel(user.getPseudo(), panelUser1);
             //panel.add(panelUser1);
+            */
 
             // // ONLINE
             panelOnline = new JPanel();
@@ -98,8 +101,8 @@ public class Contacts extends GuiElement {
             panelOnline.setBackground(Color.WHITE);
             panelOnline.setOpaque(false);
 
-            panelUser1.setAlignmentX(Component.CENTER_ALIGNMENT);
-            panelOnline.add(panelUser1);
+            //panelUser1.setAlignmentX(Component.CENTER_ALIGNMENT);
+            //panelOnline.add(panelUser1);
 
             // // OFFLINE
             panelOffline = new JPanel();
@@ -117,16 +120,19 @@ public class Contacts extends GuiElement {
                     //panelUser.setOpaque(true);
                     //panelUser.setBackground(Color.RED);
 
+                    /*
                     panelOnline.remove(panelUser1);
                     panelUser1.setBackground(Color.LIGHT_GRAY);
+                    panelUser1.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.WHITE));
                     panelOffline.add(panelUser1);
+                    */
 
                     panel.updateUI();
                 }
             });
 
             this.add(panel);
-            this.setResizable(false);
+            this.setResizable(true);
             this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
             this.addWindowListener(new WindowListener() {
                 @Override
@@ -186,6 +192,28 @@ public class Contacts extends GuiElement {
         //panel.updateUI();
         panel.revalidate();
     }
+
+    public void setUserOffline(PanelUserContact panelUser) {
+
+        panelOnline.remove(panelUser);
+        panelUser.setBackground(Color.LIGHT_GRAY);
+        panelUser.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.WHITE));
+        panelOffline.add(panelUser);
+
+        panel.updateUI();
+    }
+
+
+    public void setUserOnline(PanelUserContact panelUser) {
+
+        panelOffline.remove(panelUser);
+        panelUser.setBackground(Color.WHITE);
+        panelUser.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
+        panelOnline.add(panelUser);
+
+        panel.updateUI();
+    }
+
 
     @Override
     public void notif(String msg) {
