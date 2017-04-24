@@ -14,11 +14,18 @@ Pour lancer le chatSytem il suffit de lancer le fichier Controller.java. Cependa
   Controller dans le main.
   - Lancer le controlleur en mode "Normal", il n'y a rien a changer. Cependant on peut lancer le chatSystem en mode "Text" ou"Graphique". Pour ce faire il faut utiliser la méthode chooseGraphique(), toujours dans le main de la classe Controller.java. 
   
-Dans le cas ou l'on utilise le .jar il suffit de le lancer avec la commande : java -jar Projet_COO_POO.jar.
+Dans le cas ou l'on utilise le .jar il suffit de le lancer avec la commande : 
+
+```
+java -jar Projet_COO_POO.jar
+```
 
 ## Running the tests
 
-Nous avons lancé plusieurs types de test, ces derniers sont présent des les différentes classes du module Test.
+Nous avons lancé plusieurs types de test à l'aide de JUnit 4, ces derniers sont présent des les différentes classes du module Test.
+
+Dans le cadre des tests nous avons aussi réalisé un "Parrot" devant être lancé sur une autre machine pour pouvoir 
+effectuer des test sur la partie réseau.
 
 ### Break down into end to end tests
 
@@ -36,16 +43,10 @@ Explain what these tests test and why
 Give an example
 ```
 
-## Deployment
-
-Add additional notes about how to deploy this on a live system
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
+* [IntelliJ](https://www.jetbrains.com/idea/) -IDE utilisé
 
 ## Authors
 
@@ -60,5 +61,6 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## Ressources
 
 * Nous avons utilisé des ressources provenant du jeu Portal2(http://store.steampowered.com/app/620/?l=french)
+* Les Images utilisées sont toutes libres de droits.
 
 
