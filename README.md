@@ -29,21 +29,38 @@ effectuer des test sur la partie réseau.
 
 ### Break down into end to end tests
 
-Explain what these tests test and why
+**Les tests du model**
 
+Les test de la classe model vérifie les mises à jour d'informations du model, 
+tel que le changement de status d'un utilisateur ou encore la mise à jour des 
+flages lors de la connexion de l'utilisateur de l'application.
+
+Cela correspond aux fichiers de test suivant :
 ```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
+AllUsersTest.java
+ModelTest.java
 ```
 
+**Les tests du Controller et du réseau**
 
+Pour les tests réseaux nous avons utilisé le "Parrot" dévellopé dans ce but. 
+Nous avons donc deux tests :
+- Test de la reception et de l'envoie d'un message, déroulement du test :
+```
+On lance le parrot sur une autre machine,
+ puis lance la méthode de test sur la machine local :
+    - Crée une session du ChatSystem en mode Text avec un utilisateur de test.
+    - Envoie un message "Coucou" au Parrot.
+    - Récupére le message et le compare avec le message envoyé.
+```
+- Test de deconnection d'un utilisateur, déroulement du test :
+```
+On lance le parrot sur une autre machine, 
+puis lance la méthode de test sur la machine local :
+    - Crée une session du ChatSystem en mode Text avec un utilisateur de test.
+    - Envoie un message "Disconnect" au Parrot.
+    - Attend 1s est test le statut du Parrot, pour vérifier la déconnexion.
+```
 ## Built With
 
 * [IntelliJ](https://www.jetbrains.com/idea/) -IDE utilisé

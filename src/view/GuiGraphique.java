@@ -86,10 +86,10 @@ public class GuiGraphique implements Gui {
     public void createMainWindow() {
         active.close();
 
-        /*
+
         SoundFX login = new SoundFX();
         login.playSound("loginValid");
-        */
+
 
         mainWindows = (Contacts) GUIFactory.createGui(GUIFactory.TypeWindows.CONTACTS);
         active = mainWindows;

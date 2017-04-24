@@ -16,12 +16,7 @@ public class SoundFX {
 
         try {
 
-            //URL soundName = this.getClass().getResource("/anti_taunt10.wav");
-            File soundName = new File("C:\\Users\\camil\\OneDrive\\Documents\\Projet_COO_POO\\out\\production\\Projet_COO_POO\\anti_taunt10.wav");
-
-           // InputStream in = new FileInputStream("C:\\Users\\camil\\OneDrive\\Documents\\Projet_COO_POO\\out\\production\\Projet_COO_POO\\anti_taunt10.wav");
-            InputStream in = this.getClass().getResourceAsStream("/anti_taunt10.wav");
-            System.out.println(soundName);
+            InputStream in = this.getClass().getResourceAsStream("/success.wav");
             System.out.println("1");
 
             /*
@@ -42,19 +37,12 @@ public class SoundFX {
 
             System.out.println("2");
 
-            //AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("C:/Users/camil/OneDrive/Documents/Projet_COO_POO/out/production/Projet_COO_POO/anti_taunt10.wav"));
-            //AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundName);
+
             AudioStream audioInputStream = new AudioStream(in);
 
             System.out.println("3");
 
             AudioPlayer.player.start(audioInputStream);
-
-            /*
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            clip.start();
-            */
 
         } catch (IOException e) {
             e.printStackTrace();
