@@ -2,9 +2,6 @@ package view;
 
 import model.User;
 
-/**
- * Created by tahel on 08/03/17.
- */
 public class GUIFactory {
 
     public enum TypeWindows{

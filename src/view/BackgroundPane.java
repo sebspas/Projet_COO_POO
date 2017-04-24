@@ -4,9 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-/**
- * Created by FatePc on 4/11/2017.
- */
 public class BackgroundPane extends JPanel {
 
     private BufferedImage img;

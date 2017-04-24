@@ -5,9 +5,6 @@ import model.User;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Created by tahel on 08/03/17.
- */
 public class GuiElement extends JFrame {
 
     public GuiElement() {

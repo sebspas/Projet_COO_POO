@@ -18,9 +18,6 @@ import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
 
-/**
- * Created by tahel on 08/03/17.
- */
 public class Message extends GuiElement {
 
     private User dest;
@@ -86,6 +83,8 @@ public class Message extends GuiElement {
                 @Override
                 public void actionPerformed(ActionEvent e) {
 
+
+
                     Controller.getInstance().sendToUser(dest, new network.Message(network.Message.DataType.Text,
                             sendtext.getText(),
                             dest.getPseudo(),
@@ -140,6 +139,7 @@ public class Message extends GuiElement {
 
             this.setResizable(false);
             this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
             this.addWindowListener(new WindowListener() {
                 @Override
                 public void windowOpened(WindowEvent e) {

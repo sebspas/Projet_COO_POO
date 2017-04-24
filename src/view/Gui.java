@@ -2,9 +2,6 @@ package view;
 
 import model.User;
 
-/**
- * Created by tahel on 18/04/17.
- */
 public interface Gui {
 
 
