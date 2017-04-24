@@ -122,6 +122,7 @@ public class Controller implements Facade{
      */
     public void disconnect() {
         network.sendDisconnect();
+        System.exit(0);
     }
 
 
