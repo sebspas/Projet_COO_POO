@@ -5,8 +5,6 @@ import model.User;
 import network.Message;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by tahel on 18/04/17.
  */
@@ -19,7 +17,7 @@ public class ControllerTest {
     public void sendToUser() throws Exception {
         Controller controller = Controller.getInstance();
         controller.chooseGraphique("Text");
-        controller.buttonLoginClicked("Test");
+        controller.connect("Test");
 
         // we have to add the Parrot first
         Thread.sleep(2000);
@@ -42,7 +40,7 @@ public class ControllerTest {
     public void disconnect() throws Exception {
         Controller controller = Controller.getInstance();
         controller.chooseGraphique("Text");
-        controller.buttonLoginClicked("Test");
+        controller.connect("Test");
 
         // we have to add the Parrot first
         Thread.sleep(2000);

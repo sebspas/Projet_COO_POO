@@ -169,8 +169,11 @@ public class CommunicationSocket extends Thread {
             OutputStream out = socketClient.getOutputStream();
 
             int count;
+            int cptSize = 0;
             while ((count = in.read(bytes)) > 0) {
+                //Controller.getInstance().deliverText(destPseudo, "Percentage of transfert : " + (float)cptSize/file.length() + "%", "System");
                 out.write(bytes, 0, count);
+                cptSize += count;
             }
 
             out.flush();

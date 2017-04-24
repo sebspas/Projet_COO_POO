@@ -15,7 +15,7 @@ import java.net.UnknownHostException;
  * Controller of the App, control every interaction between the network
  * and the other components of the app (view and model)
  */
-public class Controller {
+public class Controller implements Facade{
 
     // Model who control the collected data of the user on the network
     private Model model;
@@ -82,9 +82,9 @@ public class Controller {
      * When the user click the login button, we check with model if it's okay,
      * if it's we connect to the network and we close the login window and open
      * a new window
-     * @param pseudo
+     * @param pseudo the name of the user to connect
      */
-    public void buttonLoginClicked(String pseudo) {
+    public void connect(String pseudo) {
         try {
             if (model.connectChat(pseudo, Inet4Address.getLocalHost())) {
                 gui.createMainWindow();
@@ -149,6 +149,16 @@ public class Controller {
             model.addUser(u1);
             gui.addNewUser(u1);
         }
+    }
+
+    @Override
+    public String getCurrentUserPseudo() {
+        return getCurrentUser().getPseudo();
+    }
+
+    @Override
+    public String getCurrentUserStatus() {
+        return getCurrentUser().getStatus().toString();
     }
 
     /**
@@ -222,7 +232,7 @@ public class Controller {
 
     public void launch(){
         if (isParrot) {
-            this.buttonLoginClicked("Parrot");
+            this.connect("Parrot");
         } else {
             gui.launch();
         }
@@ -239,7 +249,7 @@ public class Controller {
     public static void main(String[] args) {
         Controller controller = Controller.getInstance();
         controller.chooseGraphique("graphique");
-        //controller.setParrot();
+        controller.setParrot();
         controller.launch();
     }
 

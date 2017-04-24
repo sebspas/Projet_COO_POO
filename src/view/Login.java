@@ -10,7 +10,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 
 public class Login extends GuiElement {
@@ -55,7 +54,7 @@ public class Login extends GuiElement {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if(username.getText() != null && username.getText().length() != 0) {
-                        Controller.getInstance().buttonLoginClicked(username.getText());
+                        Controller.getInstance().connect(username.getText());
                     } else {
                         notif("<html><font color='red'>Merci de renseigner un pseudo valide !</font></html>");
                     }
