@@ -4,9 +4,6 @@ import model.User;
 
 import java.util.HashMap;
 
-/**
- * Created by tahel on 18/04/17.
- */
 public class GuiGraphique implements Gui {
 
     // First GUI we need to keep it as data member to try to connect
@@ -30,7 +27,7 @@ public class GuiGraphique implements Gui {
     }
 
     public void setUserStatus(String name, String status) {
-        userToPanel.get(name).setStatus(status);
+        userToPanel.get(name).setStatus();
 
         switch(status){
             case "Online":
@@ -43,15 +40,18 @@ public class GuiGraphique implements Gui {
                 System.out.println("user status inconnu");
                 break;
         }
+
     }
 
     public void setUserOffline(String name){
         PanelUserContact panelUser = userToPanel.get(name);
+        panelUser.disableTalk();
         mainWindows.setUserOffline(panelUser);
     }
 
     public void setUserOnline(String name){
         PanelUserContact panelUser = userToPanel.get(name);
+        panelUser.enableTalk();
         mainWindows.setUserOnline(panelUser);
     }
 
@@ -61,6 +61,9 @@ public class GuiGraphique implements Gui {
 
     public void deliverMessage(network.Message msg) {
         usertToChat.get(msg.getSrcPseudo()).addMessage(msg.getData(), msg.getSrcPseudo());
+
+        // change icon for new msg
+        userToPanel.get(msg.getSrcPseudo()).alertMsg();
     }
 
     public void deliverText(String dest, String Message, String source) {
@@ -82,6 +85,12 @@ public class GuiGraphique implements Gui {
 
     public void createMainWindow() {
         active.close();
+
+        /*
+        SoundFX login = new SoundFX();
+        login.playSound("loginValid");
+        */
+
         mainWindows = (Contacts) GUIFactory.createGui(GUIFactory.TypeWindows.CONTACTS);
         active = mainWindows;
     }
