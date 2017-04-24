@@ -38,13 +38,13 @@ public class SoundFX {
             System.out.println("2");
 
 
-            AudioStream audioInputStream = new AudioStream(in);
+            //AudioStream audioInputStream = new AudioStream(in);
 
             System.out.println("3");
 
-            AudioPlayer.player.start(audioInputStream);
+            //AudioPlayer.player.start(audioInputStream);
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

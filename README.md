@@ -6,6 +6,9 @@ Projet réalisé dans le cadre des cours de COO et POO.
 
 Le projet à été initialement dévelopé avec intelliJ, cependant il est parfaitement compatible avec n'importe qu'elle IDE, il suffit de rajouter le repertoire ressources en tant que répertoire de ressources. Il suffit ensuite de lancer le fichier main.java. 
 
+TODO CE QUE L4ON A FAIT
+
+![alt text](http://hpics.li/69fe81a)
 
 ### Installing
  
