@@ -89,6 +89,8 @@ public class CommunicationSocket extends Thread {
                     // we gotta get a file so we do the following process
                     // we create an empty file with the right format
                     OutputStream receivedFile = new FileOutputStream(System.getProperty("user.dir") + "/" + receveid.getData());
+
+                    String imagePath = System.getProperty("user.dir") + "/" + receveid.getData();
                     // temporary inputStream for the trasnfert
                     InputStream in = socketClient.getInputStream();
 
@@ -105,6 +107,20 @@ public class CommunicationSocket extends Thread {
 
                     System.out.println("File fully received !");
                     Controller.getInstance().deliverText(receveid.getSrcPseudo(), "File received : " + receveid.getData(), "System");
+
+                    // if it's an image format we print it in the window
+                    String extension = "";
+
+                    int i = receveid.getData().lastIndexOf('.');
+                    if (i > 0) {
+                        extension = receveid.getData().substring(i+1);
+                    }
+                    System.out.println("Extension :" + extension);
+                    if (extension.equals("png") || extension.equals("jpg") || extension.equals("gif")) {
+                        System.out.println(imagePath);
+                        Controller.getInstance().deliverImage(receveid.getSrcPseudo(), imagePath);
+                    }
+
                 } else {
                     // we get a classic message
                     Controller.getInstance().deliverMessage(receveid);
@@ -153,8 +169,11 @@ public class CommunicationSocket extends Thread {
             OutputStream out = socketClient.getOutputStream();
 
             int count;
+            int cptSize = 0;
             while ((count = in.read(bytes)) > 0) {
+                //Controller.getInstance().deliverText(destPseudo, "Percentage of transfert : " + (float)cptSize/file.length() + "%", "System");
                 out.write(bytes, 0, count);
+                cptSize += count;
             }
 
             out.flush();

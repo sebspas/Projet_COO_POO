@@ -15,7 +15,7 @@ public class GuiText implements Gui {
         System.out.println("Entrer le pseudo : ");
         Scanner scanner = new Scanner(System.in);
         String pseudo = scanner.next();
-        Controller.getInstance().buttonLoginClicked(pseudo);
+        Controller.getInstance().connect(pseudo);
     }
 
     public void setUserStatus(String name, String status) {
@@ -54,4 +54,10 @@ public class GuiText implements Gui {
     public void notif(String s) {
         System.out.println(s);
     }
+
+    @Override
+    public void deliverImage(String dest, String path) {
+
+    }
+
 }

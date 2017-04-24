@@ -13,12 +13,27 @@ public class Model {
     // Current user of the app
     private User currentUser;
 
+    // log of all messages for test
+    private LogMessages logMessages;
+
     /**
      * Getter current_state of the app
      * @return the state
      */
     public State getCurrent_state() {
         return current_state;
+    }
+
+    /**
+     * Get the log of messages
+     * @return the log of messages
+     */
+    public LogMessages getLogMessages() {
+        return logMessages;
+    }
+
+    public User.Status getUserStatus(String name) {
+        return allUsers.getStatus(name);
     }
 
     // All the state that the app can enter in
@@ -36,6 +51,7 @@ public class Model {
     public Model() {
         this.current_state = State.Disconnected;
         allUsers = new AllUsers();
+        logMessages = new LogMessages();
     }
 
     /**
@@ -91,4 +107,6 @@ public class Model {
     public void addUser(User user) {
         this.allUsers.addUser(user);
     }
+
+
 }

@@ -2,8 +2,9 @@ package controller;
 
 import model.Model;
 import model.User;
-import network.Network;
+import network.*;
 import view.*;
+import view.Message;
 
 import java.io.File;
 import java.net.Inet4Address;
@@ -14,15 +15,36 @@ import java.net.UnknownHostException;
  * Controller of the App, control every interaction between the network
  * and the other components of the app (view and model)
  */
-public class Controller {
+public class Controller implements Facade{
 
     // Model who control the collected data of the user on the network
     private Model model;
     // Network component, control the network interactions
     private Network network;
-
     // FLAG for the parrot behavior
     private boolean isParrot = false;
+
+    /**
+     * Make this controller a parrot, it will repeat every
+     * message and resend it
+     */
+    public void setParrot() {
+        isParrot = true;
+        gui = new GuiText();
+    }
+
+    /**
+     * Choose the type of interface TEXT or GRAPHIQUE
+     * @param type "text" or "graphique"
+     */
+    public void chooseGraphique(String type) {
+        if (type.equals("Text")) {
+            gui = new GuiText();
+        } else {
+            gui = new GuiGraphique();
+        }
+    }
+
 
     private Gui gui;
 
@@ -35,12 +57,6 @@ public class Controller {
      */
     private Controller() {
         model = new Model();
-
-        if (isParrot) {
-            gui = new GuiText();
-        } else {
-            gui = new GuiGraphique();
-        }
     }
 
     /**
@@ -66,9 +82,9 @@ public class Controller {
      * When the user click the login button, we check with model if it's okay,
      * if it's we connect to the network and we close the login window and open
      * a new window
-     * @param pseudo
+     * @param pseudo the name of the user to connect
      */
-    public void buttonLoginClicked(String pseudo) {
+    public void connect(String pseudo) {
         try {
             if (model.connectChat(pseudo, Inet4Address.getLocalHost())) {
                 gui.createMainWindow();
@@ -136,6 +152,16 @@ public class Controller {
         }
     }
 
+    @Override
+    public String getCurrentUserPseudo() {
+        return getCurrentUser().getPseudo();
+    }
+
+    @Override
+    public String getCurrentUserStatus() {
+        return getCurrentUser().getStatus().toString();
+    }
+
     /**
      * Getter of the current User
      * @return the current user
@@ -181,6 +207,9 @@ public class Controller {
                 sendToUser(msg.getSrcPseudo(), msgBis);
             }
         } else {
+            // add to the log
+            model.getLogMessages().addMessage(msg);
+
             gui.deliverMessage(msg);
         }
     }
@@ -189,6 +218,9 @@ public class Controller {
         gui.deliverText(dest, Message, source);
     }
 
+    public network.Message getLastMessage() {
+        return model.getLogMessages().getlastMessage();
+    }
 
     /**
      * Send a file to the selected user
@@ -201,10 +233,14 @@ public class Controller {
 
     public void launch(){
         if (isParrot) {
-            this.buttonLoginClicked("Parrot");
+            this.connect("Parrot");
         } else {
             gui.launch();
         }
+    }
+
+    public void deliverImage(String dest, String path) {
+        gui.deliverImage(dest, path);
     }
 
     /**
@@ -213,6 +249,8 @@ public class Controller {
      */
     public static void main(String[] args) {
         Controller controller = Controller.getInstance();
+        controller.chooseGraphique("graphique");
+        controller.setParrot();
         controller.launch();
     }
 

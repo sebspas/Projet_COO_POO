@@ -11,7 +11,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
 
@@ -208,6 +211,39 @@ public class Message extends GuiElement {
             msg.setVisible(true);
 
         } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void addImage(String imgsrc) {
+
+        try {
+            //System.out.println(imgsrc);
+            String path = "file:" + imgsrc;
+            BufferedImage bimg = ImageIO.read(new File(imgsrc));
+            //BufferedImage bimg = ImageIO.read(this.getClass().getResource("/test_resize.jpg"));
+            int height         = bimg.getHeight();
+            int width          = bimg.getWidth();
+            int widthWindow    = 420;
+            int finalWidth = 0;
+            int finalHeight = 0;
+
+
+            if (width > widthWindow) {
+                finalWidth = widthWindow;
+                finalHeight = height*widthWindow/width;
+            } else {
+                finalWidth = width;
+                finalHeight = height;
+            }
+            System.out.println(finalWidth + " " + finalHeight);
+
+            contentText += "<img src='" + path + "' width=" +  finalWidth + " height=" + finalHeight + "></img><br>";
+            discussion.setText("<html>" + contentText + "</html>");
+            discussion.revalidate();
+            scrollDiscussion.revalidate();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 

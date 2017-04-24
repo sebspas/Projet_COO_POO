@@ -67,4 +67,15 @@ public class AllUsers {
 
         return false;
     }
+
+    public User.Status getStatus(String name) {
+        for (User u: listUsers
+                ) {
+            if(u.getPseudo().equals(name)) {
+                return u.getStatus();
+            }
+        }
+
+        return null;
+    }
 }
