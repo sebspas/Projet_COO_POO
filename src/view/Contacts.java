@@ -128,6 +128,8 @@ public class Contacts extends GuiElement {
                     panelOffline.add(panelUser1);
                     panel.updateUI();
                     */
+                    SoundFX logout = new SoundFX();
+                    logout.playSound("logout");
                     Controller.getInstance().disconnect();
                 }
             });

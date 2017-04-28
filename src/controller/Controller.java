@@ -250,7 +250,7 @@ public class Controller implements Facade{
     public static void main(String[] args) {
         Controller controller = Controller.getInstance();
         controller.chooseGraphique("graphique");
-        controller.setParrot();
+        //controller.setParrot();
         controller.launch();
     }
 

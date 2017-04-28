@@ -16,9 +16,14 @@ public class GuiGraphique implements Gui {
     private HashMap<String, Message> usertToChat;
     private GuiElement active;
 
+    // for sound effect
+    SoundFX sound;
+
     public GuiGraphique() {
         userToPanel = new HashMap<>();
         usertToChat = new HashMap<>();
+
+        sound  = new SoundFX();
     }
 
     public void launch() {
@@ -64,6 +69,7 @@ public class GuiGraphique implements Gui {
 
         // change icon for new msg
         userToPanel.get(msg.getSrcPseudo()).alertMsg();
+        sound.playSound("newMsg");
     }
 
     public void deliverText(String dest, String Message, String source) {
@@ -72,6 +78,7 @@ public class GuiGraphique implements Gui {
 
     public void addNewUser(User u1) {
         mainWindows.addNewUser(u1);
+        sound.playSound("newUser");
     }
 
     /**
@@ -85,11 +92,7 @@ public class GuiGraphique implements Gui {
 
     public void createMainWindow() {
         active.close();
-
-        /*
-        SoundFX login = new SoundFX();
-        login.playSound("loginValid");
-        */
+        sound.playSound("loginValid");
 
         mainWindows = (Contacts) GUIFactory.createGui(GUIFactory.TypeWindows.CONTACTS);
         active = mainWindows;
