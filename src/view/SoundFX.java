@@ -38,14 +38,13 @@ public class SoundFX {
                     //in = this.getClass().getResourceAsStream("/kakaotalk.mp3");
                     break;
             }
-            
+
             AudioStream audioInputStream = new AudioStream(in);
             AudioPlayer.player.start(audioInputStream);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
 
