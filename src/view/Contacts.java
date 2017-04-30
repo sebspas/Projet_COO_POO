@@ -135,7 +135,7 @@ public class Contacts extends GuiElement {
             });
 
             this.add(panel);
-            this.setResizable(true);
+            this.setResizable(false);
             this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
             this.addWindowListener(new WindowListener() {
                 @Override
