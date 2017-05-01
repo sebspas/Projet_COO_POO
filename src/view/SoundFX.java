@@ -8,10 +8,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 import javax.sound.sampled.*;
 
 public class SoundFX {
 
+    /**
+     * play a specific sound according to the event
+     * @param event
+     */
     public void playSound(String event){
 
         try {
@@ -27,8 +32,13 @@ public class SoundFX {
                 case "newMsg":
                     in = this.getClass().getResourceAsStream("/sound/bird.wav");
                     break;
+                case "Offline":
+                    in = this.getClass().getResourceAsStream("/sound/goodbye.wav");
+                    break;
+                case "Online":
+                    in = this.getClass().getResourceAsStream("/sound/surprise2.wav");
+                    break;
                 case "logout":
-                    //in = this.getClass().getResourceAsStream("/sound/goodbye.wav");
                     in = this.getClass().getResourceAsStream("/sound/logout.wav");
                     break;
                 case "newUser":
@@ -46,6 +56,4 @@ public class SoundFX {
             e.printStackTrace();
         }
     }
-
-
 }

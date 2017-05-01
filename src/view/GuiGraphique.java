@@ -3,6 +3,7 @@ package view;
 import model.User;
 
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 public class GuiGraphique implements Gui {
 
@@ -17,7 +18,7 @@ public class GuiGraphique implements Gui {
     private GuiElement active;
 
     // for sound effect
-    SoundFX sound;
+    private SoundFX sound;
 
     public GuiGraphique() {
         userToPanel = new HashMap<>();
@@ -33,6 +34,7 @@ public class GuiGraphique implements Gui {
 
     public void setUserStatus(String name, String status) {
         userToPanel.get(name).setStatus();
+        sound.playSound(status);
 
         switch(status){
             case "Online":
@@ -51,12 +53,14 @@ public class GuiGraphique implements Gui {
     public void setUserOffline(String name){
         PanelUserContact panelUser = userToPanel.get(name);
         panelUser.disableTalk();
+        panelUser.setStatus();
         mainWindows.setUserOffline(panelUser);
     }
 
     public void setUserOnline(String name){
         PanelUserContact panelUser = userToPanel.get(name);
         panelUser.enableTalk();
+        panelUser.setStatus();
         mainWindows.setUserOnline(panelUser);
     }
 
@@ -91,8 +95,16 @@ public class GuiGraphique implements Gui {
     }
 
     public void createMainWindow() {
-        active.close();
         sound.playSound("loginValid");
+
+        try {
+            TimeUnit.SECONDS.sleep(1);
+            active.close();
+            TimeUnit.SECONDS.sleep(1);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         mainWindows = (Contacts) GUIFactory.createGui(GUIFactory.TypeWindows.CONTACTS);
         active = mainWindows;

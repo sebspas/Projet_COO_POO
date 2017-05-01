@@ -9,23 +9,23 @@ import java.awt.event.ActionListener;
 
 public class PanelUserContact extends JPanel{
 
-    User user;
+    private User user;
 
-    Icon photoAlert;
-    JLabel photo;
+    private Icon photoAlert;
+    private JLabel photo;
 
-    Icon online;
-    Icon offline;
-    Icon busy;
-    Icon away;
-    Icon invisible;
+    private Icon online;
+    private Icon offline;
+    private Icon busy;
+    private Icon away;
+    private Icon invisible;
 
-    JLabel name;
-    JLabel status;
+    private JLabel name;
+    private JLabel status;
 
-    JButton discuter;
+    private JButton discuter;
 
-    Message msgView;
+    private Message msgView;
 
     public PanelUserContact(User user, Message msgView) {
         this.user = user;
@@ -87,7 +87,7 @@ public class PanelUserContact extends JPanel{
     }
 
     public void setStatus() {
-        String status= user.getStatus().toString();
+        String status = user.getStatus().toString();
 
         switch (status){
             case "Online":

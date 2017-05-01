@@ -22,16 +22,17 @@ public class Message extends GuiElement {
 
     private User dest;
 
-    JEditorPane discussion;
-    JScrollPane scrollDiscussion;
+    private JEditorPane discussion;
+    private JScrollPane scrollDiscussion;
 
-    Message message;
+    private Message message;
 
-    String contentText = "";
+    private String contentText;
 
     public Message(User user) {
         super();
         this.dest = user;
+        this.contentText = "";
         initComponents();
     }
 

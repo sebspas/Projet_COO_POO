@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 public class Contacts extends GuiElement {
 
@@ -33,13 +34,10 @@ public class Contacts extends GuiElement {
             this.setContentPane(backgroundPane);
 
             panel = new JPanel();
-            //GridLayout layout = new GridLayout(20, 1);
             BoxLayout layout = new BoxLayout(panel, BoxLayout.Y_AXIS);
             panel.setLayout(layout);
             panel.setBorder(new EmptyBorder(20, 20, 20, 20));
             panel.setOpaque(false);
-            //layout.setVgap(10);
-
 
             // // USER PANEL
             User user = Controller.getInstance().getModel().getCurrentUser();
@@ -51,15 +49,6 @@ public class Contacts extends GuiElement {
             panelHeader.setBackground(Color.WHITE);
             panelHeader.setOpaque(false);
 
-            //panelUser1.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-            /*
-            panelUser.setLayout(new GridLayout(1, 3));
-            panelUser.setBorder(new EmptyBorder(5, 10, 5, 10));
-            panelUser.setPreferredSize(new Dimension(400, 20));
-            panelUser.setOpaque(false);
-            */
-
             JPanel panelUser = new JPanel();
             panelUser.setLayout(new GridLayout(1, 3));
             panelUser.setOpaque(false);
@@ -67,21 +56,13 @@ public class Contacts extends GuiElement {
             JLabel photo = new JLabel(user.getIcon());
             JLabel name = new JLabel(user.getPseudo());
             name.setFont(new Font("Arial", Font.BOLD, 20));
-            //JLabel status = new JLabel(user.getStatus().toString());
-            //status.setFont(new Font("Arial", Font.PLAIN, 20));
             JButton disconnect = new JButton("Log out");
-            //disconnect.setPreferredSize(new Dimension(20,10));
-
 
             panelUser.add(photo);
             panelUser.add(name);
-            //panelUser.add(status);
             panelUser.add(disconnect);
-
             panelHeader.add(panelUser);
             panel.add(panelHeader);
-            // //
-
 
             /*
             // USER LOCAL
@@ -95,18 +76,12 @@ public class Contacts extends GuiElement {
             //panel.add(panelUser1);
             */
 
-
             // // ONLINE
             panelOnline = new JPanel();
             panelOnline.setLayout(new BoxLayout(panelOnline, BoxLayout.Y_AXIS));
             panelOnline.setBorder(BorderFactory.createTitledBorder("Online"));
             panelOnline.setBackground(Color.WHITE);
             panelOnline.setOpaque(false);
-
-            /*
-            panelUser1.setAlignmentX(Component.CENTER_ALIGNMENT);
-            panelOnline.add(panelUser1);
-            */
 
             // // OFFLINE
             panelOffline = new JPanel();
@@ -117,19 +92,18 @@ public class Contacts extends GuiElement {
             panel.add(panelOnline);
             panel.add(panelOffline);
 
-            // disconnect button action
+            // logout button action
             disconnect.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    /*
-                    panelOnline.remove(panelUser1);
-                    panelUser1.setBackground(Color.LIGHT_GRAY);
-                    panelUser1.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.WHITE));
-                    panelOffline.add(panelUser1);
-                    panel.updateUI();
-                    */
-                    SoundFX logout = new SoundFX();
-                    logout.playSound("logout");
+                    try {
+                        SoundFX logout = new SoundFX();
+                        logout.playSound("logout");
+                        TimeUnit.SECONDS.sleep(3);
+
+                    } catch (InterruptedException ie) {
+                        ie.printStackTrace();
+                    }
                     Controller.getInstance().disconnect();
                 }
             });
@@ -140,7 +114,6 @@ public class Contacts extends GuiElement {
             this.addWindowListener(new WindowListener() {
                 @Override
                 public void windowOpened(WindowEvent e) {
-
                 }
 
                 @Override
@@ -192,29 +165,26 @@ public class Contacts extends GuiElement {
 
         panelUser.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelOnline.add(panelUser);
-        //panel.updateUI();
         panel.revalidate();
     }
 
     public void setUserOffline(PanelUserContact panelUser) {
 
         panelOnline.remove(panelUser);
-        //panelUser.setBackground(Color.WHITE);
         panelUser.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
         panelOffline.add(panelUser);
 
-        panel.updateUI();
+        panel.revalidate();
     }
 
 
     public void setUserOnline(PanelUserContact panelUser) {
 
         panelOffline.remove(panelUser);
-        //panelUser.setBackground(Color.LIGHT_GRAY);
         panelUser.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.WHITE));
         panelOnline.add(panelUser);
 
-        panel.updateUI();
+        panel.revalidate();
     }
 
 

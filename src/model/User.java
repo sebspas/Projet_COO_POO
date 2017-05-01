@@ -69,4 +69,10 @@ public class User {
     public Icon getIcon() {
         return icon;
     }
+
+    /**
+     * Setter of the Icon
+     * @param icon
+     */
+    public void setIcon(Icon icon) { this.icon = icon; }
 }

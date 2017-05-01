@@ -142,6 +142,7 @@ public class Controller implements Facade{
     public void addUser(String name, InetAddress ip) {
         // two cases if user already exist or not
         if (model.contains(name)) {
+            model.setUserStatus(name, User.Status.Online);
             // user already exist, so we update his status
             gui.setUserStatus(name, User.Status.Online.toString());
         } else {

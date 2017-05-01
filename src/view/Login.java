@@ -56,6 +56,8 @@ public class Login extends GuiElement {
                     if(username.getText() != null && username.getText().length() != 0) {
                         Controller.getInstance().connect(username.getText());
                     } else {
+                        SoundFX invalid = new SoundFX();
+                        invalid.playSound("loginInvalid");
                         notif("<html><font color='red'>Merci de renseigner un pseudo valide !</font></html>");
                     }
                 }
