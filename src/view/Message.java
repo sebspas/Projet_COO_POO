@@ -50,7 +50,7 @@ public class Message extends GuiElement {
             message = this;
             this.setTitle(dest.getPseudo() + " - Discussion");
             this.setLayout(new BorderLayout());
-            this.setPreferredSize(new Dimension(700, 450));
+            this.setPreferredSize(new Dimension(700, 470));
 
             BackgroundPane backgroundPane = new BackgroundPane();
             backgroundPane.setBackground(ImageIO.read(this.getClass().getResourceAsStream(("/bg_message.gif"))));
@@ -96,8 +96,11 @@ public class Message extends GuiElement {
                 }
             });
 
+            JPanel panel_button = new JPanel();
+            panel_button.setOpaque(false);
+
             //JToolBar toolBar = new JToolBar();
-            JButton sendFiles = new JButton("Files");
+            JButton sendFiles = new JButton("Envoyer un fichier");
             sendFiles.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -145,8 +148,12 @@ public class Message extends GuiElement {
 
 
             panel_bot.add(scrollSend, BorderLayout.CENTER);
-            panel_bot.add(sendFiles, BorderLayout.NORTH);
-            panel_bot.add(receiveFile, BorderLayout.NORTH);
+
+            panel_button.add(sendFiles);
+            panel_button.add(receiveFile);
+
+            panel_bot.add(panel_button, BorderLayout.NORTH);
+            //panel_bot.add(receiveFile, BorderLayout.NORTH);
             panel_bot.add(send, BorderLayout.EAST);
 
 
