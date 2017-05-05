@@ -140,8 +140,8 @@ réseau.
 
 **Les tests du model**
 
-Les tests de la classe *Model* vérifie les mises à jour d'informations du model,
-tel que le changement de t d'un utilisateur ou encore la mise à jour des
+Les tests de la classe *Model* vérifient les mises à jour d'informations du model,
+tel que le changement de statut d'un utilisateur ou encore la mise à jour des
 flags lors de la connexion de l'utilisateur à l'application.
 
 Cela correspond aux fichiers de test suivant :
@@ -187,6 +187,6 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## Ressources
 
 * Nous avons utilisé des ressources provenant du jeu Portal2 (http://store.steampowered.com/app/620/?l=french)
-* Les Images utilisées sont toutes libres de droits.
+* Les images utilisées sont toutes libres de droits.
 
 
