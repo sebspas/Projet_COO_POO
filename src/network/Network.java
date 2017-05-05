@@ -208,6 +208,6 @@ public class Network extends Thread {
     }
 
     public void startReception(String user, String absolutePath) {
-        UserToSocket.get(user).receiveFileData(absolutePath);
+        UserToSocket.get(user).readyToReceive(absolutePath);
     }
 }
