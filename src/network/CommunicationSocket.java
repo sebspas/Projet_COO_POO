@@ -40,6 +40,8 @@ public class CommunicationSocket extends Thread {
     private String pseudoOfSrc;
     private boolean isReceving = false;
 
+    private boolean isInit = false;
+
     /**
      * Basic constructor, just create the socket
      * @param destip the ip adress of the dest
@@ -74,15 +76,16 @@ public class CommunicationSocket extends Thread {
      */
     public void run() {
         try {
-            if (type == 1 && running) {
+            if (type == 1 && running && !isInit) {
                 System.out.println("Socket en attente");
                 socketClient = socketServer.accept();
                 writer = new ObjectOutputStream(socketClient.getOutputStream());
                 reader = new ObjectInputStream(socketClient.getInputStream());
                 System.out.println("Connexion établie !!!");
+                isInit = true;
             }
 
-            while (running || !isReceving) {
+            while (running) {
                 Message receveid = (Message)reader.readObject();
 
                 if(receveid.getType() == Message.DataType.File) {
@@ -140,7 +143,7 @@ public class CommunicationSocket extends Thread {
     public void receiveFileData(String path) {
         try {
             System.out.println("Starting file reception ....");
-            isReceving = true;
+            this.wait();
             Controller.getInstance().deliverText(pseudoOfSrc, "Starting file reception...", "System");
             // we gotta get a file so we do the following process
             // we create an empty file with the right format
@@ -172,7 +175,7 @@ public class CommunicationSocket extends Thread {
 
             System.out.println("File fully received !");
             Controller.getInstance().deliverText(pseudoOfSrc, "File received : " + fileNameToReceive, "System");
-            isReceving = false;
+            this.notify();
 
             // if it's an image format we print it in the window
             String extension = "";
