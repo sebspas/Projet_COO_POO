@@ -130,6 +130,7 @@ public class Message extends GuiElement {
             panel_bot.setOpaque(false);
 
             panel_bot.add(sendFiles, BorderLayout.NORTH);
+            panel_bot.add(sendtext, BorderLayout.CENTER);
             //panel_bot.add(receiveFile, BorderLayout.NORTH);
             panel_bot.add(send, BorderLayout.EAST);
 
@@ -206,34 +207,6 @@ public class Message extends GuiElement {
 
     @Override
     public void notif(String msg) {
-
-    }
-
-    public static void main(String[] args) {
-        try {
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            // If Nimbus is not available, fall back to cross-platform
-            try {
-                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-            } catch (Exception ex) {
-                // not worth my time
-            }
-        }
-        try {
-            User user = new User("Coucou", Inet4Address.getLocalHost());
-
-            Message msg = new Message(user);
-            msg.setVisible(true);
-
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
 
     }
 
