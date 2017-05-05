@@ -11,7 +11,9 @@ public class User {
     // All the status possible for an user : Online, Offline...
     public enum Status {
         Online,
-        Offline
+        Offline,
+        Away,
+        Busy
     }
 
     // The name of the user
