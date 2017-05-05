@@ -118,7 +118,7 @@ public class Message extends GuiElement {
             //toolBar.add(sendFiles);
 
             JButton receiveFile = new JButton("Recevoir un fichier");
-            sendFiles.addActionListener(new ActionListener() {
+            receiveFile.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     JFileChooser fileChooser = new JFileChooser();
