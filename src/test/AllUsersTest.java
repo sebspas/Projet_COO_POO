@@ -36,11 +36,6 @@ public class AllUsersTest {
     }
 
     @org.junit.Test
-    public void checkAvailable() throws Exception {
-        System.out.println("checkAvailable NOT IMPLEMENTED YET");
-    }
-
-    @org.junit.Test
     public void contains() throws Exception {
         AllUsers allUsers = new AllUsers();
 

@@ -100,7 +100,7 @@ public class Message extends GuiElement {
             panel_button.setOpaque(false);
 
             //JToolBar toolBar = new JToolBar();
-            JButton sendFiles = new JButton("Envoyer un fichier");
+            JButton sendFiles = new JButton("Send a file");
             sendFiles.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
