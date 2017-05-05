@@ -145,7 +145,8 @@ public class CommunicationSocket extends Thread {
                 } else {
                     Message receveid = (Message)reader.readObject();
                     if (receveid.getData().equals("ready")) {
-                        // do nothing
+                        // send a first message to say the file is comming
+                        this.sendMsg(receveid);
                     } else {
                         if(receveid.getType() == Message.DataType.File) {
                             if (receveid.getData().equals("accept")) {
