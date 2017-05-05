@@ -1,11 +1,11 @@
 # Projet COO & POO
 
 Projet réalisé dans le cadre des cours de Conception et Programmation
- Orienté Objet 2017.
+ Orienté Objet, 2017.
 
 ### Prerequisites
 
-Le projet à été initialement développé avec intelliJ, cependant il est
+Le projet a été initialement développé avec IntelliJ, cependant il est
 parfaitement compatible avec n'importe quelle IDE : il suffit de rajouter
 le répertoire *ressources* en tant que répertoire de ressources.
 Pour exécuter, lancer le fichier *Controller.java*.
@@ -14,15 +14,26 @@ Pour exécuter, lancer le fichier *Controller.java*.
  
 Pour lancer le ChatSytem il suffit de lancer le fichier *Controller.java*.
 Cependant il y a deux configurations possible :
-  * Lancer le controlleur en mode "Parrot" (Perroquet), il suffit de
-    rajouter la ligne setParrot() après la création du
-  Controller dans le main.
+
   * Lancer le controlleur en mode "Normal", il n'y a rien a changer.
-    Cependant on peut lancer le chatSystem en mode "Text" ou"Graphique".
-    Pour ce faire il faut utiliser la méthode chooseGraphique(), toujours
-    dans le main de la classe Controller.java.
-  
-Dans le cas ou l'on utilise le .jar il suffit de le lancer avec la commande : 
+    ```
+    java Controller
+     ```
+    Le ChatSystem sera, par défaut, lancé en mode "Graphique".
+    Cependant on peut lancer le ChatSystem en mode "Text".
+    Pour ce faire il faut ajouter l'argument "text" lorsque l'on lance
+    le main de la classe Controller.
+    ```
+    java Controller text
+     ```
+
+  * Lancer le controlleur en mode "Parrot" (Perroquet), il suffit
+    d'ajouter l'argument "parrot" lorsque l'on lance le main de la classe
+    Controller. *(Le mode "Parrot" lancera l'application en mode "Text".)*
+    ```
+    java Controller parrot
+    ```
+Dans le cas où l'on utilise le .jar, il suffit de le lancer avec la commande :
 
 ```
 java -jar Projet_COO_POO.jar
@@ -33,7 +44,7 @@ compiler le projet et lancer les tests.***
 
 ## Implementation
 
-Nous avons réalisé ce projet en respectant du mieux que possible les
+Nous avons réalisé ce projet en respectant (du mieux que possible) les
 spécifications du cahier des charges fourni.
 
 ### Features
@@ -46,12 +57,15 @@ que nous avons implémenté :
     phase de connexion, et network.Message, pour la discussion entre
     utilisateurs).
 
+  * Nous avons également mise à disposition l'interface controller.Facade afin que
+    nous partagions tous, les mêmes prototypes pour les fonctions du controller.
+
   * La fenêtre pricipale de l'application est divisée en trois parties :
-    l'utilisateur (icône, pseudo, bouton de déconnexion [Logout]), les
-    utilisateurs connectés (Online) et ceux qui se sont déconnectés
+    l'utilisateur (icône, pseudo, statut, bouton de déconnexion [Log out]),
+    les utilisateurs connectés (Online) et ceux qui se sont déconnectés
     (Offline) durant la session courante.
 
-  * Le bouton [Logout] permet à l'utilisateur de fermer l'application.
+  * Le bouton [Log out] permet à l'utilisateur de fermer l'application.
 
   * Tout utilisateur quittant l'application envoit un notification sur
     le réseau et sera vu par les autres utilisateurs courants comme
@@ -63,10 +77,17 @@ que nous avons implémenté :
     pourront à nouveau accéder à l'ensemble de leur dernière discussion
     avec celui-ci (et lui parler à nouveau).
 
+  * Lorsqu'il est connecté, l'utilisateur a le choix entre plusieurs
+    statuts : *Online*, *Busy*, *Away*. A chaque changement de statut,
+    un message sera envoyé aux autres utilisateurs qui seront notamment
+    alertés par le changement de couleur de la bulle (représentant le
+    statut) de notre utilisateur dans leur fenêtre principale.
+
   * Des sons de notification ont été ajoutés pour notifier l'utilisateur
     des événements suivants : essai de connexion avec un login vide,
     connexion avec entrée d'un login, apparition d'un nouvel utilisateur
-    dans le ChatSystem, déconnexion d'un utilisateur, re-connexion d'un
+    dans le ChatSystem, changement de statut d'un utilisateur,
+    déconnexion d'un utilisateur, re-connexion d'un
     utilisateur connu, déconnexion.
 
   * A la réception d'un nouveau message, l'utilisateur est alerté par un
@@ -77,11 +98,17 @@ que nous avons implémenté :
   * Nous avons implémenté l'envoi et la réception de fichiers via notre
     application. Dans la fenêtre de discussion, l'utilisateur A peut choisir
     un fichier sur son disque à envoyer à l'utilisateur B en appuyant sur
-    le bouton [Files].
+    le bouton [Send a file].
 
   * Le System notifiera l'utilisateur A de l'envoi de son fichier et
-    l'utilisateur B de la réception de ce dernier. Le fichier envoyé est
-    automatiquement sauvegardé à la racine du projet sur le disque de B.
+    l'utilisateur B de la réception de ce dernier.
+
+  * Lors de l'envoi d'un fichier, et avant la réception de celui-ci, une
+    fenêtre s'ouvre chez B pour le laisser choisir l'emplacement où il
+    veut sauvegardé le fichier. si B clique sur le bouton [Cancel] de
+    cette fenêtre, le fichier envoyé sera automatiquement sauvegardé dans
+    le répertoire *home* (sous Linux) ou à la racine du projet sur le
+    disque de B (sous Windows).
 
   * Si le fichier envoyé est une image, elle sera automatiquement
     redimmensionnée et affichée dans la fenêtre de discussion de B.
@@ -91,7 +118,6 @@ que nous avons implémenté :
 
 Nous n'avons pas pu implémenter les features suivantes :
   * Les discussions de groupes n'ont pas pu être implémentées
-    (faute de groupes assez avancés pour pouvoir tester).
   * La vérification de la disponibilité du login a finalement été
     abandonnée après avoir juger la procédure peut adapter à une
     application P2P tel que celle-ci.
@@ -115,7 +141,7 @@ réseau.
 **Les tests du model**
 
 Les tests de la classe *Model* vérifie les mises à jour d'informations du model,
-tel que le changement de status d'un utilisateur ou encore la mise à jour des 
+tel que le changement de t d'un utilisateur ou encore la mise à jour des
 flags lors de la connexion de l'utilisateur à l'application.
 
 Cela correspond aux fichiers de test suivant :

@@ -38,7 +38,7 @@ public class Controller implements Facade{
      * @param type "text" or "graphique"
      */
     public void chooseGraphique(String type) {
-        if (type.equals("Text")) {
+        if (type.equals("text")) {
             gui = new GuiText();
         } else {
             gui = new GuiGraphique();
@@ -261,19 +261,25 @@ public class Controller implements Facade{
      * @param args no args for the moment
      */
     public static void main(String[] args) {
+
         if (args.length == 0) {
             Controller controller = Controller.getInstance();
             controller.chooseGraphique("graphique");
-            //controller.setParrot();
             controller.launch();
+
         } else if (args[0].equals("parrot")){
             Controller controller = Controller.getInstance();
-            controller.chooseGraphique("graphique");
             controller.setParrot();
             controller.launch();
+
+        } else if (args[0].equals("text")){
+            Controller controller = Controller.getInstance();
+            controller.chooseGraphique("text");
+            controller.launch();
+
         } else {
-            System.out.println("Erreur argument invalide, ne rien mettre en argument pour lancer l'app ou mettre :" +
-                    " parrot pour un perroquet!");
+            System.out.println("Erreur argument invalide:\n Ne rien mettre en argument pour lancer l'app ou passer en paramètre :" +
+                    " \n\t-- \"parrot\" pour un perroquet \n\t-- \"text\" pour un mode textuel de ChatWithBoo");
         }
 
     }
