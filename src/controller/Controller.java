@@ -255,4 +255,12 @@ public class Controller implements Facade{
         controller.launch();
     }
 
+    public void setUserStatus(String userName, String data) {
+        model.setUserStatus(userName, User.Status.valueOf(data));
+        gui.setUserStatus(userName, data);
+    }
+
+    public void sendStatusChange(String status) {
+        network.sendStatusUpdate(status);
+    }
 }

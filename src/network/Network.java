@@ -90,6 +90,24 @@ public class Network extends Thread {
         }
     }
 
+    public void sendStatusUpdate(String status) {
+        try {
+            //TODO debug hello
+            // broadcast a vrai
+            socketSender.setBroadcast(true);
+            ControlMessage controlMessage = new ControlMessage(Controller.getInstance().getCurrentUser().getPseudo(),
+                    networkUtils.getLocalHostLANAddress(), -1, status);
+            byte[] data = networkUtils.convertObjToData(controlMessage);
+
+            DatagramPacket packet = new DatagramPacket(data, data.length, InetAddress.getByName("255.255.255.255"), listenNumber);
+            socketSender.send(packet);
+
+            System.out.println("Packet status send !");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Run a thread wo collect all the incoming message and do the associate action
      */
@@ -142,6 +160,7 @@ public class Network extends Thread {
                 } else if (controlMessage1.getData().equals("socket_created")) {
                     System.out.println("Socket Created received !");
                     if (UserToSocket.containsKey(controlMessage1.getUserName())) {
+                        // SECURITER POUR L'INTERACTION AVEC D'AUTRE CHAT
                         // si l'utilisateur à déja une socket associé
                         // on update le port de destination pour cette communication
                         //UserToSocket.get(controlMessage1.getUserName()).setPortSocketDest(controlMessage1.getPort());
@@ -177,6 +196,9 @@ public class Network extends Thread {
                     Controller.getInstance().setUserOffLine(controlMessage1.getUserName());
                     UserToSocket.get(controlMessage1.getUserName()).closeSocket();
                     UserToSocket.remove(controlMessage1.getUserName());
+                } else if(controlMessage1.getData().equals("Away") || controlMessage1.getData().equals("Busy") || controlMessage1.getData().equals("Online")) {
+                    System.out.println("New status received...");
+                    Controller.getInstance().setUserStatus(controlMessage1.getUserName(), controlMessage1.getData());
                 }
             }
 

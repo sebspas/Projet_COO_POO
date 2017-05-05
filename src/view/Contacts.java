@@ -2,6 +2,7 @@ package view;
 
 import controller.Controller;
 import model.User;
+import network.Network;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -50,7 +51,7 @@ public class Contacts extends GuiElement {
             panelHeader.setOpaque(false);
 
             JPanel panelUser = new JPanel();
-            panelUser.setLayout(new GridLayout(1, 3));
+            panelUser.setLayout(new GridLayout(1, 4));
             panelUser.setOpaque(false);
 
             JLabel photo = new JLabel(user.getIcon());
@@ -58,8 +59,21 @@ public class Contacts extends GuiElement {
             name.setFont(new Font("Arial", Font.BOLD, 20));
             JButton disconnect = new JButton("Log out");
 
+            Object[] elements = new Object[]{"Online", "Away", "Busy"};
+            JComboBox list = new JComboBox(elements);
+
+            list.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String status = list.getSelectedItem().toString();
+                    //System.out.println(status);
+                    Controller.getInstance().sendStatusChange(status);
+                }
+            });
+
             panelUser.add(photo);
             panelUser.add(name);
+            panelUser.add(list);
             panelUser.add(disconnect);
             panelHeader.add(panelUser);
             panel.add(panelHeader);
