@@ -118,4 +118,9 @@ public class GuiGraphique implements Gui {
     public void deliverImage(String dest, String path) {
         usertToChat.get(dest).addImage(path);
     }
+
+    @Override
+    public String chooseDirectory(String dest) {
+        return usertToChat.get(dest).chooseDirectory();
+    }
 }

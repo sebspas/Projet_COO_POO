@@ -253,6 +253,9 @@ public class Controller implements Facade{
         network.sendStatusUpdate(status);
     }
 
+    public String chooseDirectory(String dest) {
+        return gui.chooseDirectory(dest);
+    }
     /**
      * Main to launch of the program
      * @param args no args for the moment
@@ -275,8 +278,4 @@ public class Controller implements Facade{
 
     }
 
-
-    public void startReception(String user, String absolutePath) {
-        network.startReception(user, absolutePath);
-    }
 }

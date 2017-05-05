@@ -2,6 +2,9 @@ package network;
 
 import controller.Controller;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -31,18 +34,6 @@ public class CommunicationSocket extends Thread {
     private InetAddress destip;
 
     private int type = 0;
-
-    // FOR the file transfer
-    private String destPseudoFile;
-    private File fileToSend;
-    private int lengthToReceived;
-    private String fileNameToReceive;
-    private String pseudoOfSrc;
-    private boolean isReceving = false;
-    private String path;
-
-    private boolean isInit = false;
-    private boolean receiveFile = false;
 
     /**
      * Basic constructor, just create the socket
@@ -74,50 +65,50 @@ public class CommunicationSocket extends Thread {
     }
 
 
-    public void readyToReceive(String path) {
-        this.path = path;
-        this.receiveFile = true;
-        //ask for the file
-        Message msg = new Message(Message.DataType.Text, "ready", destPseudoFile, Controller.getInstance().getCurrentUserPseudo());
-        this.sendMsg(msg);
-    }
     /**
      * The run() method, wo is listening and getting the incoming message
      */
     public void run() {
         try {
-            if (type == 1 && running && !isInit) {
+            if (type == 1 && running) {
                 System.out.println("Socket en attente");
                 socketClient = socketServer.accept();
                 writer = new ObjectOutputStream(socketClient.getOutputStream());
                 reader = new ObjectInputStream(socketClient.getInputStream());
                 System.out.println("Connexion établie !!!");
-                isInit = true;
             }
 
             while (running) {
-                if (receiveFile) {
+                Message receveid = (Message) reader.readObject();
+
+                if (receveid.getType() == Message.DataType.File) {
+                    // we print that we can receive a file
+                    System.out.println("Starting File reception ....");
+                    System.out.println("Name of the file : " + receveid.getData());
+                    Controller.getInstance().deliverText(receveid.getSrcPseudo(), "Asking file recption : " + receveid.getData(), "System");
+                    // we wait for an other message with the size of the file
+                    Message received2 = (Message) reader.readObject();
+
+                    int lengthToReceived = Integer.parseInt(received2.getData());
+                    System.out.println("Length to received : " + lengthToReceived);
+                    Controller.getInstance().deliverText(receveid.getSrcPseudo(), "Size of the file to receive : " + received2.getData(), "System");
+
                     System.out.println("Starting file reception ....");
 
-                    Controller.getInstance().deliverText(pseudoOfSrc, "Starting file reception...", "System");
+                    Controller.getInstance().deliverText(receveid.getSrcPseudo(), "Starting file reception...", "System");
                     // we gotta get a file so we do the following process
+                    // we make the user choose where to save the file
+                    String path = Controller.getInstance().chooseDirectory(receveid.getSrcPseudo());
                     // we create an empty file with the right format
-                    OutputStream receivedFile = new FileOutputStream(path + "/" + fileNameToReceive);
+                    OutputStream receivedFile = new FileOutputStream(path + "/" + receveid.getData());
 
-                    String imagePath = path + "/" + fileNameToReceive;
+                    String imagePath = path + "/" + receveid.getData();
                     // temporary inputStream for the trasnfert
                     InputStream in = socketClient.getInputStream();
 
-                    byte[] bytes = new byte[16*1024];
+                    byte[] bytes = new byte[16 * 1024];
                     int cptSize = 0;
                     int count = 0;
-
-                    // we send the accept first
-                    Message msg = new Message(Message.DataType.File,
-                            "accept",
-                            destPseudoFile,
-                            Controller.getInstance().getCurrentUserPseudo());
-                    this.sendMsg(msg);
 
                     while (cptSize < lengthToReceived && (count = in.read(bytes)) > 0) {
                         receivedFile.write(bytes, 0, count);
@@ -128,61 +119,29 @@ public class CommunicationSocket extends Thread {
                     receivedFile.close();
 
                     System.out.println("File fully received !");
-                    Controller.getInstance().deliverText(pseudoOfSrc, "File received : " + fileNameToReceive, "System");
-                    receiveFile = false;
+                    Controller.getInstance().deliverText(receveid.getSrcPseudo(), "File received : " + receveid.getData(), "System");
+
                     // if it's an image format we print it in the window
                     String extension = "";
 
-                    int i = fileNameToReceive.lastIndexOf('.');
+                    int i = receveid.getData().lastIndexOf('.');
                     if (i > 0) {
-                        extension = fileNameToReceive.substring(i+1);
+                        extension = receveid.getData().substring(i + 1);
                     }
                     System.out.println("Extension :" + extension);
                     if (extension.equals("png") || extension.equals("jpg") || extension.equals("gif")) {
                         System.out.println(imagePath);
-                        Controller.getInstance().deliverImage(pseudoOfSrc, imagePath);
+                        Controller.getInstance().deliverImage(receveid.getSrcPseudo(), imagePath);
                     }
                 } else {
-                    Message receveid = (Message)reader.readObject();
-                    if (receveid.getData().equals("ready")) {
-                        // send a first message to say the file is comming
-                        Message msg = new Message(Message.DataType.Text, "File is sending...", destPseudoFile, Controller.getInstance().getCurrentUserPseudo());
-
-                        this.sendMsg(receveid);
-                    } else {
-                        if(receveid.getType() == Message.DataType.File) {
-                            if (receveid.getData().equals("accept")) {
-                                // we received the accept for the file to send so we send it
-                                if (fileToSend != null) {
-                                    // we send the file
-                                    Controller.getInstance().deliverText(receveid.getSrcPseudo(), "Starting file transfer...Please wait", "System");
-                                    sendFileData();
-                                } else {
-                                    System.out.println("Erreur pas de fichier à envoyer");
-                                }
-                            } else {
-                                // we print that we can receive a file
-                                System.out.println("Starting File reception ....");
-                                System.out.println("Name of the file : " + receveid.getData());
-                                Controller.getInstance().deliverText(receveid.getSrcPseudo(), "Asking file recption : " + receveid.getData() , "System");
-                                // we wait for an other message with the size of the file
-                                Message received2 = (Message)reader.readObject();
-                                pseudoOfSrc = receveid.getSrcPseudo();
-                                fileNameToReceive = receveid.getData();
-                                lengthToReceived = Integer.parseInt(received2.getData());
-                                System.out.println("Length to received : " + lengthToReceived);
-                                Controller.getInstance().deliverText(receveid.getSrcPseudo(), "Size of the file to receive : " + received2.getData() , "System");
-                            }
-                        } else {
-                            // we get a classic message
-                            Controller.getInstance().deliverMessage(receveid);
-                        }
-                    }
+                    // we get a classic message
+                    Controller.getInstance().deliverMessage(receveid);
                 }
-            }
 
+
+            }
         } catch (EOFException e) {
-          // it's nothing
+            // it's nothing
         } catch (SocketException e) {
             System.out.println("Socket Fermée.");
         } catch (Exception e) {
@@ -190,80 +149,76 @@ public class CommunicationSocket extends Thread {
         }
     }
 
-    /**
-     * Send the given message to the dest socket
-     * @param msg the msg to send
-     */
-    public void sendMsg(Message msg) {
-        try {
-            writer.writeObject(msg);
-            writer.flush();
-            System.out.println("Message envoyé !");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-    public void sendFileData() {
-        try {
-            byte[] bytes = new byte[16 * 1024];
-            InputStream in = new FileInputStream(fileToSend);
-            OutputStream out = socketClient.getOutputStream();
-
-            int count;
-            int cptSize = 0;
-            while ((count = in.read(bytes)) > 0) {
-                //Controller.getInstance().deliverText(destPseudo, "Percentage of transfert : " + (float)cptSize/file.length() + "%", "System");
-                out.write(bytes, 0, count);
-                cptSize += count;
+            /**
+             * Send the given message to the dest socket
+             * @param msg the msg to send
+             */
+        public void sendMsg(Message msg) {
+            try {
+                writer.writeObject(msg);
+                writer.flush();
+                System.out.println("Message envoyé !");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-            out.flush();
-            in.close();
-            Controller.getInstance().deliverText(destPseudoFile, "File sent !", "System");
-
-            System.out.println("File sent !");
-
-        }catch (Exception e) {
-            e.printStackTrace();
         }
-    }
 
-    public void sendFile(File file, String destPseudo) {
+        public void sendFile(File file, String destPseudo) {
 
-        Controller.getInstance().deliverText(destPseudo, "Starting the file transfert of : " + file.getName(), "System");
-        // Send the file format and warn that a file is comming
-        Message msg = new Message(Message.DataType.File, file.getName(),
-                destPseudo, Controller.getInstance().getCurrentUser().getPseudo());
-        this.sendMsg(msg);
-        // send the file size
-        Message msg2 = new Message(Message.DataType.File, file.length() + "",
-                destPseudo, Controller.getInstance().getCurrentUser().getPseudo());
-        this.sendMsg(msg2);
+            Controller.getInstance().deliverText(destPseudo, "Starting the file transfert of : " + file.getName(), "System");
+            // Send the file format and warn that a file is comming
+            Message msg = new Message(Message.DataType.File, file.getName(),
+                    destPseudo, Controller.getInstance().getCurrentUser().getPseudo());
+            this.sendMsg(msg);
+            // send the file size
+            Message msg2 = new Message(Message.DataType.File, file.length() + "",
+                    destPseudo, Controller.getInstance().getCurrentUser().getPseudo());
+            this.sendMsg(msg2);
 
-        this.destPseudoFile = destPseudo;
-        this.fileToSend = file;
-    }
+            try {
+                byte[] bytes = new byte[16 * 1024];
+                InputStream in = new FileInputStream(file);
+                OutputStream out = socketClient.getOutputStream();
 
-    /**
-     * Set the dest port, because it's not know when we create the socket
-     * @param portSocketDest the dest port
-     */
-    public void setPortSocketDest(int portSocketDest) {
-        this.portSocketDest = portSocketDest;
-    }
+                int count;
+                int cptSize = 0;
+                while ((count = in.read(bytes)) > 0) {
+                    //Controller.getInstance().deliverText(destPseudo, "Percentage of transfert : " + (float)cptSize/file.length() + "%", "System");
+                    out.write(bytes, 0, count);
+                    cptSize += count;
+                }
 
-    public void closeSocket() {
-        try {
-            running = false;
-            if (type == 1) {
-                socketServer.close();
-                socketClient.close();
-            } else {
-                socketClient.close();
+                out.flush();
+                in.close();
+                Controller.getInstance().deliverText(destPseudo, "File sent !", "System");
+
+                System.out.println("File sent !");
+
+            }catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        }
+
+        /**
+         * Set the dest port, because it's not know when we create the socket
+         * @param portSocketDest the dest port
+         */
+        public void setPortSocketDest(int portSocketDest) {
+            this.portSocketDest = portSocketDest;
+        }
+
+        public void closeSocket() {
+            try {
+                running = false;
+                if (type == 1) {
+                    socketServer.close();
+                    socketClient.close();
+                } else {
+                    socketClient.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
-}

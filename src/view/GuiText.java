@@ -60,4 +60,10 @@ public class GuiText implements Gui {
 
     }
 
+    @Override
+    public String chooseDirectory(String dest) {
+        System.out.println("This method doesn't exist in text mod....");
+        return null;
+    }
+
 }

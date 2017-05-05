@@ -206,8 +206,4 @@ public class Network extends Thread {
             e.printStackTrace();
         }
     }
-
-    public void startReception(String user, String absolutePath) {
-        UserToSocket.get(user).readyToReceive(absolutePath);
-    }
 }

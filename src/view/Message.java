@@ -117,25 +117,6 @@ public class Message extends GuiElement {
             });
             //toolBar.add(sendFiles);
 
-            JButton receiveFile = new JButton("Recevoir un fichier");
-            receiveFile.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    JFileChooser fileChooser = new JFileChooser();
-                    fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-                    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                    fileChooser.setAcceptAllFileFilterUsed(false);
-                    int result = fileChooser.showOpenDialog(message);
-                    if (result == JFileChooser.APPROVE_OPTION) {
-                        File selectedFile = fileChooser.getSelectedFile();
-                        System.out.println("Selected directory: " + selectedFile.getAbsolutePath());
-                        // send file
-                        //Controller.getInstance().sendFileToUser(selectedFile, dest.getPseudo());
-                        Controller.getInstance().startReception(dest.getPseudo(), selectedFile.getAbsolutePath());
-                    }
-                }
-            });
-
             JPanel panel_top_right = new JPanel();
             panel_top_right.setLayout(new BorderLayout());
             panel_top_right.setOpaque(false);
@@ -148,13 +129,7 @@ public class Message extends GuiElement {
             panel_bot.setLayout(new BorderLayout());
             panel_bot.setOpaque(false);
 
-
-            panel_bot.add(scrollSend, BorderLayout.CENTER);
-
-            panel_button.add(sendFiles);
-            panel_button.add(receiveFile);
-
-            panel_bot.add(panel_button, BorderLayout.NORTH);
+            panel_bot.add(sendFiles, BorderLayout.NORTH);
             //panel_bot.add(receiveFile, BorderLayout.NORTH);
             panel_bot.add(send, BorderLayout.EAST);
 
@@ -209,6 +184,24 @@ public class Message extends GuiElement {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public String chooseDirectory() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fileChooser.setAcceptAllFileFilterUsed(false);
+
+        String path = System.getProperty("user.home");
+
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            path = selectedFile.getAbsolutePath();
+            System.out.println("Selected directory: " + selectedFile.getAbsolutePath());
+        }
+
+        return path;
     }
 
     @Override
