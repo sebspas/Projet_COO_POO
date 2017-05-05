@@ -47,7 +47,7 @@ public class Contacts extends GuiElement {
             panelHeader.setLayout(new BoxLayout(panelHeader, BoxLayout.Y_AXIS));
             panelHeader.setBorder(BorderFactory.createTitledBorder("Welcome " + user.getPseudo() + " !"));
             panelHeader.setPreferredSize(new Dimension(380, 100));
-            panelHeader.setBackground(Color.WHITE);
+            //panelHeader.setBackground(Color.WHITE);
             panelHeader.setOpaque(false);
 
             JPanel panelUser = new JPanel();

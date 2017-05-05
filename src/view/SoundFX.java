@@ -20,7 +20,7 @@ public class SoundFX {
     public void playSound(String event){
 
         try {
-            InputStream in = this.getClass().getResourceAsStream("/sound/surprise.wav");
+            InputStream in;
 
             switch(event){
                 case "loginValid":
@@ -45,7 +45,7 @@ public class SoundFX {
                     in = this.getClass().getResourceAsStream("/sound/hello.wav");
                     break;
                 default:
-                    //in = this.getClass().getResourceAsStream("/kakaotalk.mp3");
+                    in = this.getClass().getResourceAsStream("/sound/surprise.wav");
                     break;
             }
 
