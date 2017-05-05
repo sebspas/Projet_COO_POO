@@ -244,17 +244,6 @@ public class Controller implements Facade{
         gui.deliverImage(dest, path);
     }
 
-    /**
-     * Main to launch of the program
-     * @param args no args for the moment
-     */
-    public static void main(String[] args) {
-        Controller controller = Controller.getInstance();
-        controller.chooseGraphique("graphique");
-        //controller.setParrot();
-        controller.launch();
-    }
-
     public void setUserStatus(String userName, String data) {
         model.setUserStatus(userName, User.Status.valueOf(data));
         gui.setUserStatus(userName, data);
@@ -262,5 +251,32 @@ public class Controller implements Facade{
 
     public void sendStatusChange(String status) {
         network.sendStatusUpdate(status);
+    }
+
+    /**
+     * Main to launch of the program
+     * @param args no args for the moment
+     */
+    public static void main(String[] args) {
+        if (args.length == 0) {
+            Controller controller = Controller.getInstance();
+            controller.chooseGraphique("graphique");
+            //controller.setParrot();
+            controller.launch();
+        } else if (args[0].equals("parrot")){
+            Controller controller = Controller.getInstance();
+            controller.chooseGraphique("graphique");
+            controller.setParrot();
+            controller.launch();
+        } else {
+            System.out.println("Erreur argument invalide, ne rien mettre en argument pour lancer l'app ou mettre :" +
+                    " parrot pour un perroquet!");
+        }
+
+    }
+
+
+    public void startReception(String user, String absolutePath) {
+        network.startReception(user, absolutePath);
     }
 }

@@ -20,7 +20,7 @@ public class SoundFX {
     public void playSound(String event){
 
         try {
-            InputStream in = this.getClass().getResourceAsStream("/surprise.wav");
+            InputStream in = this.getClass().getResourceAsStream("/sound/surprise.wav");
 
             switch(event){
                 case "loginValid":
