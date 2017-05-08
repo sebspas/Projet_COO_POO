@@ -124,8 +124,8 @@ Nous n'avons pas pu implémenter les features suivantes :
 
 **L'interface graphique**
 
-![login](https://image.spreadshirtmedia.net/image-server/v1/compositions/111312403/views/3,width=300,height=300,version=1385669094/portal-2-glados-because-i-m-a-potato-mug.jpg)
-![GUI](https://github.com/sebspas/Projet_COO_POO/blob/master/moana-heihei.jpg?raw=true)
+![login](https://github.com/sebspas/Projet_COO_POO/blob/master/gui_chat_login.png?raw=true)
+![GUI](https://github.com/sebspas/Projet_COO_POO/blob/master/gui_chat.png?raw=true)
 
 ## Running the tests
 
