@@ -33,7 +33,8 @@ Cependant il y a deux configurations possible :
     ```
     java Controller parrot
     ```
-Dans le cas où l'on utilise le .jar, il suffit de le lancer avec la commande :
+Dans le cas où l'on utilise le .jar (fourni à la racine du projet), il
+suffit de le lancer avec la commande :
 
 ```
 java -jar Projet_COO_POO.jar
