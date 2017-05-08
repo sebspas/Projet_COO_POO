@@ -17,7 +17,7 @@ public class LogMessages {
     }
 
     public void addMessage(Message msg) {
-        System.out.println(" Mess" + msg.toString());
+        //System.out.println(" Mess" + msg.toString());
         try {
             listMessage.put(msg);
         } catch (InterruptedException e) {
@@ -27,7 +27,7 @@ public class LogMessages {
 
     public Message getlastMessage() {
         try {
-            System.out.println(listMessage);
+            //System.out.println(listMessage);
             Message msg = listMessage.poll(3, TimeUnit.SECONDS);
             if (msg == null) {
                 System.out.println("Timeout");
