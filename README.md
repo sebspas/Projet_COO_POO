@@ -1,7 +1,8 @@
 # Projet COO & POO
 
 Projet réalisé dans le cadre des cours de Conception et Programmation
- Orienté Objet, 2017.
+ Orienté Objet, 2017. 
+ * Version : Java 1.8
 
 ### Prerequisites
 
@@ -175,6 +176,7 @@ puis on lance la méthode de test sur la machine local :
 ## Built With
 
 * [IntelliJ](https://www.jetbrains.com/idea/) -IDE utilisée
+* Java 1.8
 
 ## Authors
 
