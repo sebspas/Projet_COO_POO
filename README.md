@@ -124,7 +124,7 @@ Nous n'avons pas pu implémenter les features suivantes :
 
 **L'interface graphique**
 
-![potato](https://image.spreadshirtmedia.net/image-server/v1/compositions/111312403/views/3,width=300,height=300,version=1385669094/portal-2-glados-because-i-m-a-potato-mug.jpg)
+![login](https://image.spreadshirtmedia.net/image-server/v1/compositions/111312403/views/3,width=300,height=300,version=1385669094/portal-2-glados-because-i-m-a-potato-mug.jpg)
 ![GUI](https://github.com/sebspas/Projet_COO_POO/blob/master/moana-heihei.jpg?raw=true)
 
 ## Running the tests
