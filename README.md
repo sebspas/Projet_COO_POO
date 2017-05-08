@@ -148,6 +148,7 @@ Cela correspond aux fichiers de test suivant :
 ```
 AllUsersTest.java
 ModelTest.java
+LogMessagesTest.java
 ```
 
 **Les tests du Controller et du réseau**
