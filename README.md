@@ -13,8 +13,8 @@ Pour exécuter, lancer le fichier *Controller.java*.
 
 ### Installing
  
-Pour lancer le ChatSytem il suffit de lancer le fichier *Controller.java*.
-Cependant il y a deux configurations possible :
+Pour lancer le ChatSytem, il suffit de lancer le fichier *Controller.java*.
+Cependant il y a deux configurations possibles :
 
   * Lancer le controlleur en mode "Normal", il n'y a rien a changer.
     ```
